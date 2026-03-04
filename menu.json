@@ -1,0 +1,73 @@
+{
+  "hamburguesas": [
+    {
+      "id_referencia": "hamb_clasica",
+      "nombre": "Clásica",
+      "descripcion": "Pan artesanal, carne 150g, queso cheddar, lechuga, tomate y salsa de la casa.",
+      "imagen": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80",
+      "tags": ["CLÁSICO", "100% RES"]
+    },
+    {
+      "id_referencia": "hamb_doble",
+      "nombre": "Doble Carne",
+      "descripcion": "Doble carne de 150g, doble queso cheddar, tocineta ahumada y salsa BBQ.",
+      "imagen": "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80",
+      "tags": ["DOBLE", "PARA COMPARTIR"]
+    },
+    {
+      "id_referencia": "hamb_aplastada",
+      "nombre": "Smash Burger",
+      "descripcion": "Dos carnes finas crujientes, doble queso americano, cebolla caramelizada.",
+      "imagen": "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80",
+      "tags": ["TENDENCIA", "SMASH"]
+    }
+  ],
+  "perros": [
+    {
+      "id_referencia": "perro_sencillo",
+      "nombre": "Sencillo",
+      "descripcion": "Pan suave, salchicha premium, papio, queso costeño rallado, salsas tradicionales.",
+      "imagen": "https://images.unsplash.com/photo-1615719417309-025db4a47faa?auto=format&fit=crop&w=800&q=80",
+      "tags": ["TRADICIONAL"]
+    },
+    {
+      "id_referencia": "perro_suizo",
+      "nombre": "Suizo",
+      "descripcion": "Salchicha suiza gratinada con extra queso fundido, tocineta y piña.",
+      "imagen": "https://images.unsplash.com/photo-1590740693998-cbce41804fca?auto=format&fit=crop&w=800&q=80",
+      "tags": ["QUESUDO", "PREMIUM"]
+    }
+  ],
+  "salchipapas": [
+    {
+      "id_referencia": "salchi_sencilla",
+      "nombre": "Sencilla",
+      "descripcion": "Papas a la francesa doraditas con trozos de salchicha seleccionada y salsas.",
+      "imagen": "https://images.unsplash.com/photo-1625937286074-9ca519d5d9df?auto=format&fit=crop&w=800&q=80",
+      "tags": ["PARA UNO"]
+    },
+    {
+      "id_referencia": "salchi_especial",
+      "nombre": "A Fuego",
+      "descripcion": "Papas locas con pollo, carne desmechada, chorizo, maíz, queso fundido y salsas.",
+      "imagen": "https://images.unsplash.com/photo-1644704170910-858882b54556?auto=format&fit=crop&w=800&q=80",
+      "tags": ["GIGANTE", "MIXTA"]
+    }
+  ],
+  "bebidas": [
+    {
+      "id_referencia": "bebida_gaseosa",
+      "nombre": "Gaseosa 400ml",
+      "descripcion": "Coca-Cola, Postobon, o Colombiana fría.",
+      "imagen": "https://images.unsplash.com/photo-1550503192-35327ec8d2a6?auto=format&fit=crop&w=800&q=80",
+      "tags": ["REFRESCANTE"]
+    },
+    {
+      "id_referencia": "bebida_natural",
+      "nombre": "Jugo Natural",
+      "descripcion": "Jugo en agua o leche (Mora, Mango, Lulo, Maracuyá).",
+      "imagen": "https://images.unsplash.com/photo-1622597467836-f38240662c41?auto=format&fit=crop&w=800&q=80",
+      "tags": ["NATURAL", "FRUTA"]
+    }
+  ]
+}
