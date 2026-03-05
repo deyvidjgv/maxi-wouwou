@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html>
   <body>
@@ -40,3 +41,47 @@
     </script>
   </body>
 </html>
+=======
+<!doctype html>
+<html>
+  <body>
+    <canvas id="canvas"></canvas>
+    <img
+      id="logo"
+      src="img/assets/logo.png"
+      style="display: none" />
+    <script>
+      window.onload = function () {
+        const img = document.getElementById('logo');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+        let r = 0,
+          g = 0,
+          b = 0,
+          count = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i + 3] > 128) {
+            // Only count non-transparent pixels
+            r += data[i];
+            g += data[i + 1];
+            b += data[i + 2];
+            count++;
+          }
+        }
+        r = Math.floor(r / count);
+        g = Math.floor(g / count);
+        b = Math.floor(b / count);
+        const hex =
+          '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        document.body.innerHTML += `<h1 id="result">${hex} rgb(${r}, ${g}, ${b})</h1>`;
+        console.log('COLOR_RESULT:', hex, 'rgb(' + r + ',' + g + ',' + b + ')');
+      };
+    </script>
+  </body>
+</html>
+>>>>>>> a3c41e4abcda6d5c2116f60e540cc99ee0c705bb

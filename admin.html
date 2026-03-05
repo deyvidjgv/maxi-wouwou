@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="es">
   <head>
@@ -625,3 +626,635 @@
 
   </body>
 </html>
+=======
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Admin - Maxi Guau Guau</title>
+    <link
+      rel="stylesheet"
+      href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="designinspo/variables.css" />
+    <link
+      rel="stylesheet"
+      href="designinspo/layout.css" />
+    <link
+      rel="stylesheet"
+      href="designinspo/components.css" />
+    <link
+      rel="stylesheet"
+      href="designinspo/responsive.css" />
+    <link
+      rel="manifest"
+      href="manifest.json" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sniglet:wght@400;800&display=swap"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"
+      rel="stylesheet" />
+  </head>
+  <body>
+    <div id="appBody">
+      <aside
+        class="sidebar"
+        id="sidebar">
+        <div class="sidebar-brand">
+          <div class="brand-wrapper">
+             <div class="brand-logo">
+                <img src="img/assets/logo.png" alt="Maxi Guau Guau Logo" />
+             </div>
+             <div class="brand-text">
+               <span class="brand-maxi">Maxi</span>
+               <span class="brand-wouwou">Guau Guau</span>
+             </div>
+          </div>
+        </div>
+        <nav class="sidebar-nav">
+          <button
+            class="sidebar-btn sidebar-btn-new active"
+            onclick="
+              app.navegar('reportetotal');
+              setActiveBtn(this);
+            ">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Dashboard</span>
+          </button>
+          <button
+            class="sidebar-btn sidebar-btn-new"
+            onclick="
+              app.navegar('comanda');
+              setActiveBtn(this);
+            ">
+            <i data-lucide="shopping-cart"></i>
+            <span>Tomar Pedidos</span>
+          </button>
+          <button
+            class="sidebar-btn sidebar-btn-new"
+            onclick="
+              app.navegar('cocina');
+              setActiveBtn(this);
+            ">
+            <i data-lucide="chef-hat"></i>
+            <span>Cocina</span>
+          </button>
+          <button
+            class="sidebar-btn sidebar-btn-new"
+            onclick="
+              app.navegar('pedidosweb');
+              setActiveBtn(this);
+            ">
+            <i data-lucide="globe"></i>
+            <span>Pedidos Web</span>
+          </button>
+          <button
+            class="sidebar-btn sidebar-btn-new"
+            id="btn-nav-inventario"
+            onclick="
+              app.navegar('inventario');
+              setActiveBtn(this);
+            ">
+            <i data-lucide="package"></i>
+            <span>Inventario</span>
+          </button>
+          <button
+            class="sidebar-btn sidebar-btn-new"
+            onclick="setActiveBtn(this)">
+            <i data-lucide="settings"></i>
+            <span>Configuración</span>
+          </button>
+        </nav>
+        <div class="sidebar-footer">
+          <small>v6.0.0 | Admin</small>
+        </div>
+      </aside>
+
+      <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+        onclick="toggleSidebar()"></div>
+
+      <header>
+        <div class="header-left">
+          <button
+            class="sidebar-toggle"
+            onclick="toggleSidebar()">
+            <span class="material-symbols-rounded">menu</span>
+          </button>
+          <div class="user-data">
+            <span>Admin</span>
+            :
+            <b id="txtUserEmail"></b>
+          </div>
+        </div>
+        <button
+          class="btn btn-secondary"
+          onclick="app.cerrarSesion()">
+          Cerrar Sesión
+        </button>
+      </header>
+
+      <main>
+        <!-- Vista Dashboard / Reportes -->
+        <div
+          id="v-reportetotal"
+          class="modulo">
+          <!-- TODO EL CONTENIDO DEL DASHBOARD -->
+          <div class="dashboard-grid">
+            <div class="kpi-section">
+              <div class="card kpi-card">
+                <span class="kpi-title">Ventas del día</span>
+                <span
+                  class="kpi-value count-up"
+                  id="kpi-ventas">
+                  $0
+                </span>
+              </div>
+              <div class="card kpi-card">
+                <span class="kpi-title">Pedidos</span>
+                <span
+                  class="kpi-value count-up"
+                  id="kpi-pedidos">
+                  0
+                </span>
+              </div>
+              <div class="card kpi-card">
+                <span class="kpi-title">Ticket promedio</span>
+                <span
+                  class="kpi-value count-up"
+                  id="kpi-ticket">
+                  $0
+                </span>
+              </div>
+              <div class="card kpi-card">
+                <span class="kpi-title">Producto más vendido</span>
+                <span
+                  class="kpi-value"
+                  id="kpi-top-prod">
+                  -
+                </span>
+              </div>
+            </div>
+
+            <div class="charts-section card">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 20px;
+                ">
+                <h2 style="margin: 0; font-size: 1.25rem">
+                  Análisis de Ventas
+                </h2>
+                <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                  <div class="chart-tabs">
+                    <button
+                      class="chart-tab-btn active"
+                      onclick="app.setChartMode('money', this)">
+                      Dinero
+                    </button>
+                    <button
+                      class="chart-tab-btn"
+                      onclick="app.setChartMode('products', this)">
+                      Productos
+                    </button>
+                    <button
+                      class="chart-tab-btn"
+                      onclick="app.setChartMode('payments', this)">
+                      Pagos
+                    </button>
+                  </div>
+                  <div class="report-controls" style="display: flex; align-items: center; gap: 10px; background: #fff; padding: 6px 14px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <i data-lucide="calendar" style="width: 16px; height: 16px; color: #64748b;"></i>
+                      <input type="date" id="fechaReporte" onchange="app.renderReporteDash()" style="border: none; background: transparent; font-size: 0.85rem; color: #1e293b; font-family: inherit; font-weight: 500; outline: none; width: 130px;">
+                    </div>
+                    <div style="width: 1px; height: 18px; background: #cbd5e1; margin: 0 5px;"></div>
+                    <button
+                      class="btn-icon"
+                      style="background: #1e293b; color: #fff; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.8rem; transition: all 0.2s;"
+                      onclick="app.generarPDFReporte()"
+                      onmouseover="this.style.background='#334155'"
+                      onmouseout="this.style.background='#1e293b'">
+                      <i data-lucide="download" style="width: 14px; height: 14px"></i>
+                      <span>PDF</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                id="chart-sub-tabs"
+                style="display: flex; gap: 10px; margin-bottom: 20px"></div>
+              <div
+                class="chart-container"
+                style="height: 350px">
+                <canvas id="analysisChart"></canvas>
+              </div>
+            </div>
+
+            <div class="side-info-section card">
+              <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 1.1rem">
+                Top 5 Productos
+              </h2>
+              <div id="top-products-list"></div>
+            </div>
+
+            <div class="bottom-section card">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  margin-bottom: 20px;
+                ">
+                <h2 style="margin: 0; font-size: 1.1rem">
+                  <i
+                    data-lucide="package"
+                    style="
+                      width: 20px;
+                      height: 20px;
+                      vertical-align: middle;
+                      margin-right: 6px;
+                    "></i>
+                  Inventario Actual
+                </h2>
+              </div>
+              <div
+                id="inventory-summary-list"
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                  gap: 15px;
+                "></div>
+            </div>
+          </div>
+
+          <div class="dashboard-card transactions-card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+              <h2 class="card-title" style="margin: 0;">
+                <span class="material-symbols-rounded">receipt</span>
+                Historial de Ventas
+              </h2>
+              <button class="btn btn-danger-icon" onclick="app.limpiarHistorialDia()" title="Limpiar historial de hoy" style="padding: 8px 12px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px;">
+                <i data-lucide="trash-2" style="width: 16px;"></i>
+                Limpiar Hoy
+              </button>
+            </div>
+            <div
+              class="transactions-list"
+              id="listaVentas"></div>
+          </div>
+        </div>
+
+        <!-- Vista Inventario (Nueva Sección en lugar de Modal) -->
+        <div id="v-inventario" class="modulo" style="display: none;">
+          <div class="card" style="margin-bottom: 20px;">
+             <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin: 0;"><i data-lucide="package" style="vertical-align: middle; margin-right: 10px;"></i> Gestión de Inventario</h2>
+                <div class="inventory-tabs">
+                   <button class="inventory-tab-btn active" id="tab-inv-hamburguesas" onclick="app.selectInventoryCat('hamburguesas')">
+                      <img src="https://img.icons8.com/ultraviolet/40/hamburger.png" style="width: 24px; height: 24px;" />
+                      <span>Hamburguesas</span>
+                   </button>
+                   <button class="inventory-tab-btn" id="tab-inv-perros" onclick="app.selectInventoryCat('perros')">
+                      <img src="https://img.icons8.com/ultraviolet/40/hot-dog.png" style="width: 24px; height: 24px;" />
+                      <span>Perros</span>
+                   </button>
+                   <button class="inventory-tab-btn" id="tab-inv-salchipapas" onclick="app.selectInventoryCat('salchipapas')">
+                      <img src="https://img.icons8.com/external-icongeek26-outline-colour-icongeek26/64/external-stir-fry-mexican-food-icongeek26-outline-colour-icongeek26.png" style="width: 24px; height: 24px;" />
+                      <span>Salchipapas</span>
+                   </button>
+                   <button class="inventory-tab-btn" id="tab-inv-bebidas" onclick="app.selectInventoryCat('bebidas')">
+                      <img src="https://img.icons8.com/pulsar-gradient/48/soda-water.png" style="width: 24px; height: 24px;" />
+                      <span>Bebidas</span>
+                   </button>
+                   <button class="inventory-tab-btn" id="tab-inv-otros" onclick="app.selectInventoryCat('otros')">
+                      <img src="https://img.icons8.com/bubbles/50/null/box.png" style="width: 24px; height: 24px;" />
+                      <span>Otros</span>
+                   </button>
+                </div>
+              </div>
+          </div>
+
+          <div id="inventory-list-view-main" class="card">
+             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px;">
+                <h3 id="inventory-list-title-main" style="margin: 0; color: var(--primary); font-family: 'Sniglet', cursive; font-size: 1.5rem;">Seleccione una categoría</h3>
+                <div style="display: flex; gap: 10px;">
+                   <button class="btn btn-primary" onclick="app.mostrarFormularioNuevoProducto()" style="border-radius: 12px; padding: 10px 20px;">
+                      <i data-lucide="plus" style="margin-right: 5px;"></i> Nuevo Producto
+                   </button>
+                   <button class="btn btn-primary" onclick="app.abrirEdicionDescripcion()" style="border-radius: 12px; padding: 10px 20px;">
+                      <i data-lucide="edit-2" style="margin-right: 5px;"></i> Editar Descripción
+                   </button>
+                   <div id="togglePedidosWeb" class="toggle-pill pausado" onclick="app.togglePedidosWeb()">
+                      <i data-lucide="power" style="width: 18px; margin-right: 8px;"></i>
+                      <span>Pedidos Web: Pausados</span>
+                   </div>
+                </div>
+             </div>
+             <div id="inventory-list-container-main" class="inventory-grid-modern">
+                <!-- Tarjetas de productos con diseño mejorado -->
+             </div>
+          </div>
+
+          <!-- Formulario nuevo producto con selector de imagen -->
+          <div id="inventory-form-container-main" style="display: none;" class="card">
+             <h3 style="margin-bottom: 18px; color: var(--primary); font-family: 'Sniglet', cursive;">
+               <i data-lucide="plus-circle" style="vertical-align: middle; margin-right: 8px; width: 20px;"></i>
+               Añadir Producto
+             </h3>
+             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <input type="text" id="inv-prod-name" placeholder="Nombre del producto..." />
+                <input type="number" id="inv-prod-price" placeholder="Precio (ej. 12000)" />
+                <input type="number" id="inv-prod-stock" placeholder="Stock inicial" />
+             </div>
+             <div style="margin-bottom: 14px;">
+                <input type="text" id="inv-prod-desc" placeholder="Descripción (ingredientes, variantes...)" style="width: 100%;" />
+             </div>
+
+             <!-- Selector visual de imagen -->
+             <div style="background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+               <p style="font-weight: 700; font-size: 0.82rem; color: #64748b; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                 <i data-lucide="image" style="vertical-align: middle; width: 14px; margin-right: 4px;"></i>
+                 Foto del Producto <span style="font-weight: 400; color: #94a3b8;">(opcional)</span>
+               </p>
+               <div id="img-picker-grid" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+               <input type="hidden" id="inv-prod-imagen" />
+             </div>
+
+             <div style="display: flex; gap: 10px;">
+                <button class="btn btn-secondary" onclick="app.ocultarFormularioNuevoProducto()">
+                  <i data-lucide="x" style="width: 16px; margin-right: 4px;"></i>Cancelar
+                </button>
+                <button class="btn btn-primary" onclick="app.guardarNuevoProducto()">
+                  <i data-lucide="save" style="width: 16px; margin-right: 4px;"></i>Guardar Producto
+                </button>
+             </div>
+          </div>
+        </div>
+
+        <!-- Vista Tomar Pedidos (Mesas) -->
+        <div
+          id="v-comanda"
+          class="modulo"
+          style="display: none">
+          <div style="padding: 15px; text-align: center">
+            <h2 style="margin: 0; font-size: 1.5rem">
+              <i
+                data-lucide="grid-3x3"
+                style="vertical-align: middle; margin-right: 10px"></i>
+              Gestión de Mesas
+            </h2>
+          </div>
+          <div
+            id="gridMesas"
+            class="grid-mesas"></div>
+        </div>
+
+        <!-- Vista Cocina -->
+        <div
+          id="v-cocina"
+          class="modulo"
+          style="display: none">
+          <div style="padding: 15px; text-align: center">
+            <h2 style="margin: 0; font-size: 1.5rem">
+              <i
+                data-lucide="chef-hat"
+                style="
+                  width: 32px;
+                  height: 32px;
+                  vertical-align: middle;
+                  margin-right: 10px;
+                "></i>
+              Monitor de Cocina
+            </h2>
+          </div>
+          <div id="listaCocina"></div>
+        </div>
+
+        <!-- Vista Pedidos Web -->
+        <div
+          id="v-pedidosweb"
+          class="modulo"
+          style="display: none">
+          <div style="padding: 15px; text-align: center;">
+            <h2 style="margin: 0; font-size: 1.5rem">
+              <i data-lucide="globe" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px"></i>
+              Pedidos Web (Externos)
+            </h2>
+          </div>
+          <div id="listaPedidosWeb" style="padding: 15px; display: grid; gap: 15px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));"></div>
+        </div>
+      </main>
+
+      <!-- Modal Mesa -->
+      <div
+        id="modalMesa"
+        class="modal"
+        style="display: none">
+        <div class="modal-content modal-split">
+          <!-- 1. PANEL MENÚ (Selección) -->
+          <div class="section-panel panel-menu">
+            <div id="categoriasView">
+              <h3 style="color: var(--primary); margin-top: 0; margin-bottom: 20px;">Menú</h3>
+              <div class="grid-categorias-large">
+                <button onclick="app.abrirCategoria('hamburguesas')" class="btn-categoria-large">
+                  <img src="https://img.icons8.com/ultraviolet/40/hamburger.png" style="width: 48px; height: 48px" alt="Hamburguesas">
+                  <span>Hamburguesas</span>
+                </button>
+                <button onclick="app.abrirCategoria('perros')" class="btn-categoria-large">
+                  <img src="https://img.icons8.com/ultraviolet/40/hot-dog.png" style="width: 48px; height: 48px" alt="Perros">
+                  <span>Perros Calientes</span>
+                </button>
+                <button onclick="app.abrirCategoria('salchipapas')" class="btn-categoria-large">
+                  <img src="https://img.icons8.com/external-icongeek26-outline-colour-icongeek26/64/external-stir-fry-mexican-food-icongeek26-outline-colour-icongeek26.png" style="width: 48px; height: 48px" alt="Salchipapas">
+                  <span>Salchipapas</span>
+                </button>
+                <button onclick="app.abrirCategoria('bebidas')" class="btn-categoria-large">
+                  <img src="https://img.icons8.com/pulsar-gradient/48/soda-water.png" style="width: 48px; height: 48px" alt="Bebidas">
+                  <span>Bebidas</span>
+                </button>
+              </div>
+            </div>
+            <div id="productosView" style="display: none">
+              <button class="btn-volver" onclick="app.volverCategorias()">
+                <span class="material-symbols-rounded">arrow_back</span> Atrás
+              </button>
+              <h3 id="tituloCategoriaActual" style="color: var(--primary); margin-top: 15px; margin-bottom: 20px;">Productos</h3>
+              <div id="listaItems" class="grid-productos"></div>
+            </div>
+          </div>
+
+          <!-- 2. PANEL PEDIDO (Lo que hay en la mesa) -->
+          <div class="section-panel panel-pedido">
+            <h2 id="mesaNum" style="margin-top: 0; font-size: 1.4rem; text-align: center;"></h2>
+            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; color: #64748b; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Pedido Actual:</div>
+            <div id="itemsCarrito" style="flex: 1; overflow-y: auto;"></div>
+          </div>
+
+          <!-- 3. PANEL PAGO (Totales y Cobro) -->
+          <div class="section-panel panel-pago">
+            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 15px; color: #64748b; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Total y Pago:</div>
+            
+            <div class="llevar-box" style="margin-bottom: 10px">
+              <label>Llevar ($1000):</label>
+              <div style="display: flex; gap: 5px">
+                <button onclick="app.decrementarLlevar()" style="padding: 0 10px; background: var(--primary); color: white;">-</button>
+                <input type="number" id="cantLlevar" value="0" min="0" style="width: 50px; padding: 5px; text-align: center" onchange="app.actualizarTotal()" />
+                <button onclick="app.incrementarLlevar()" style="padding: 0 10px; background: var(--primary); color: white;">+</button>
+              </div>
+            </div>
+
+            <div class="propina-box">
+              <label>Agregar Propina:</label>
+              <div style="display: flex; gap: 5px">
+                <button class="btn-propina" onclick="app.setPropina(0)">0%</button>
+                <button class="btn-propina" onclick="app.setPropina(0.1)">10%</button>
+                <button class="btn-propina" onclick="app.setPropinaMensaje()">Monto</button>
+              </div>
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.05); border-radius: 10px; padding: 10px; margin-top: 10px; border: 1px solid rgba(16, 185, 129, 0.1);">
+              <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                <span>Subtotal:</span>
+                <span id="subtotalMesa">$0</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; color: #10b981; font-size: 0.9rem;">
+                <span>Propina:</span>
+                <span id="propinaMesa">$0</span>
+              </div>
+              <h3 id="totalMesa" style="margin: 8px 0 0 0; font-size: 1.5rem; color: var(--primary); text-align: center;">Total: $0</h3>
+            </div>
+
+            <select id="metodoPago" onchange="app.onPaymentMethodChange()" style="margin-top: 15px; width: 100%;">
+              <option value="">Pendiente (Cocina)</option>
+              <option value="Efectivo">Efectivo</option>
+              <option value="Transferencia">Transferencia</option>
+              <option value="Mixto">Mixto</option>
+            </select>
+
+            <div id="paymentInputs" style="margin-top: 10px">
+              <div id="efectivoBox" style="display: none; margin-top: 8px">
+                <label>Recibido:</label>
+                <input type="number" id="cashReceived" min="0" value="0" style="width: 100%;" oninput="app.updateChange()" />
+                <div id="changeDisplay" style="margin-top: 6px; font-weight: 600; color: #10b981;">Cambio: $0</div>
+              </div>
+              <div id="transferBox" style="display: none; margin-top: 8px">
+                <label>Referencia:</label>
+                <input type="text" id="transferRef" placeholder="Referencia..." style="width: 100%;" />
+                <label style="margin-top:5px; display:block;">Monto:</label>
+                <input type="number" id="transferAmount" min="0" value="0" style="width: 100%;" oninput="app.updateChange()" />
+              </div>
+              <div id="mixedBox" style="display: none; margin-top: 8px">
+                <label>Monto transfer:</label>
+                <input type="number" id="mixedTransferAmount" min="0" value="0" style="width: 100%;" oninput="app.updateChange()" />
+                <label style="margin-top:5px; display:block;">Recibido efectivo:</label>
+                <input type="number" id="mixedCashReceived" min="0" value="0" style="width: 100%;" oninput="app.updateChange()" />
+                <div id="mixedChangeDisplay" style="margin-top: 6px; font-weight: 600; color: #10b981;">Cambio: $0</div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 20px;">
+              <button class="btn-cancelar" style="flex: 1" onclick="app.cerrarMesa()">Cerrar</button>
+              <button class="btn-confirmar" style="flex: 2" onclick="app.guardarPedido()">Guardar / Pagar</button>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+
+
+      <footer
+        style="
+          padding: 40px 20px;
+          text-align: center;
+          color: #94a3b8;
+          font-size: 0.75rem;
+        ">
+        <p>
+          Desarrollado por:
+          <strong>Deyvid Javier Godoy V.</strong>
+        </p>
+        <span>v6.0.0 | Admin</span>
+      </footer>
+    </div>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      // Protección de ruta para Admin
+      firebase.auth().onAuthStateChanged((user) => {
+        if (!user) {
+          window.location.href = 'login.html';
+        } else {
+          // Validar rol en Firestore
+          firebase
+            .firestore()
+            .collection('users')
+            .doc(user.uid)
+            .get()
+            .then((doc) => {
+              if (doc.exists && doc.data().rol === 'admin') {
+                // El admin puede estar aquí
+              } else {
+                // Si no es admin, fuera
+                window.location.href = 'login.html';
+              }
+            });
+        }
+      });
+
+      lucide.createIcons();
+      function toggleSidebar() {
+        var sb = document.getElementById('sidebar');
+        var body = document.body;
+        if (window.innerWidth <= 768) {
+          sb.classList.toggle('open');
+          document.getElementById('sidebarOverlay').classList.toggle('open');
+        } else {
+          sb.classList.toggle('collapsed');
+          body.classList.toggle('sidebar-collapsed');
+        }
+      }
+      function setActiveBtn(el) {
+        document
+          .querySelectorAll('.sidebar-btn')
+          .forEach((b) => b.classList.remove('active'));
+        el.classList.add('active');
+        if (window.innerWidth < 768) toggleSidebar();
+      }
+    </script>
+
+    <!-- Modal para editar descripción -->
+    <div id="modalEditarDesc" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1000; display:flex; align-items:center; justify-content:center;">
+      <div style="background:white; padding:30px; border-radius:12px; max-width:500px; width:90%; box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+        <h2 style="margin:0 0 15px 0; color:#333;">Editar Descripción</h2>
+        <p style="font-size:0.9rem; color:#666; margin:0 0 15px 0;">Actualiza la descripción que verán los clientes en la página de pedidos:</p>
+        <textarea id="textareaDesc" style="width:100%; height:120px; padding:10px; border:2px solid #e2e8f0; border-radius:8px; font-family:inherit; font-size:0.95rem; resize:vertical;" placeholder="Escribe la descripción del negocio..."></textarea>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button onclick="app.cerrarEdicionDescripcion()" style="padding:10px 20px; border:none; background:#e2e8f0; border-radius:8px; cursor:pointer; font-weight:600;">Cancelar</button>
+          <button onclick="app.guardarDescripcion()" style="padding:10px 20px; border:none; background:#10b981; color:white; border-radius:8px; cursor:pointer; font-weight:600;">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
+>>>>>>> a3c41e4abcda6d5c2116f60e540cc99ee0c705bb

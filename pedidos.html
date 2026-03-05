@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="es">
   <head>
@@ -942,3 +943,924 @@
     </script>
   </body>
 </html>
+=======
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Maxi Guau Guau – Pide en Línea</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="css/pedidos.css" />
+
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+  </head>
+
+  <body>
+    <!-- ══ NAVBAR ══ -->
+    <nav class="nav">
+      <a
+        href="#"
+        class="nav-brand">
+        <img
+          src="img/assets/logo.png"
+          alt="Maxi Guau Guau" />
+        <span>MAXI GUAU GUAU</span>
+      </a>
+      <div class="nav-status-container">
+        <div
+          id="navTogglePedidos"
+          class="nav-toggle-status activo"
+          onclick="
+            window.togglePedidosWebDesdeNav && window.togglePedidosWebDesdeNav()
+          ">
+          <i class="fas fa-power-off"></i>
+          <span id="navTogglePedidosText">Pedidos: Abiertos</span>
+        </div>
+      </div>
+      <a
+        href="https://wa.me/573044212892"
+        target="_blank"
+        class="nav-ws">
+        <i class="fab fa-whatsapp"></i>
+        304 421 2892
+      </a>
+    </nav>
+
+    <!-- ══ HERO ══ -->
+    <section class="hero">
+      <div class="hero-inner">
+        <h1>
+          PIDE DESDE
+          <br />
+          <span>DONDE ESTÉS</span>
+        </h1>
+        <p>Hamburguesas, perros y más · directo a nuestra cocina</p>
+        <a
+          href="#menu"
+          class="btn-hero">
+          <i class="fas fa-utensils"></i>
+          VER MENÚ
+        </a>
+      </div>
+    </section>
+
+    <!-- ══ INFO STRIP ══ -->
+    <div class="info-strip">
+      <div class="info-card">
+        <div class="ic-head">
+          <i class="fas fa-store"></i>
+          QUIÉNES SOMOS
+        </div>
+        <p id="negocioDesc">
+          Comida rápida local hecha con amor. Ingredientes frescos, sabor
+          auténtico y atención de calidad en cada pedido. 🐾
+        </p>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">
+          <i class="fas fa-map-marker-alt"></i>
+          UBICACIÓN
+        </div>
+        <p>
+          📍 Cúcuta, Norte de Santander
+          <br />
+          🕐 Lun–Vie 12pm–9pm
+          <br />
+          🕐 Sáb–Dom 11am–10pm
+        </p>
+      </div>
+      <div class="info-card">
+        <div class="ic-head">
+          <i class="fas fa-phone"></i>
+          CONTACTO
+        </div>
+        <p>
+          📞
+          <a href="tel:3044212892">304 421 2892</a>
+          <br />
+          <a
+            href="https://wa.me/573044212892"
+            target="_blank"
+            style="color: #25d366">
+            <i class="fab fa-whatsapp"></i>
+            Escribir por WhatsApp
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ══ MENÚ ══ -->
+    <section
+      id="menu"
+      class="menu-section">
+      <div>
+        <span class="menu-title">NUESTRO MENÚ</span>
+      </div>
+
+      <!-- Pantalla de pausa -->
+      <div
+        id="pausaScreen"
+        style="display: none"
+        class="pausa">
+        <div class="pausa-icon">⏸</div>
+        <h2>PEDIDOS PAUSADOS</h2>
+        <p>
+          En este momento no estamos recibiendo pedidos en línea. ¡Pronto
+          volvemos!
+        </p>
+        <a
+          href="https://wa.me/573044212892"
+          target="_blank"
+          class="btn-ws-pausa">
+          <i class="fab fa-whatsapp"></i>
+          ESCRÍBENOS
+        </a>
+      </div>
+
+      <!-- Menú activo -->
+      <div id="menuActivo">
+        <!-- Ticket -->
+        <div class="ticket-bar">
+          <span>
+            <span class="dot"></span>
+            Pedido activo
+          </span>
+          <span
+            class="ticket-id"
+            id="ticketId">
+            #WEB-000
+          </span>
+        </div>
+
+        <!-- Tabs -->
+        <div
+          class="cat-tabs"
+          id="catTabs"></div>
+
+        <!-- Productos -->
+        <div
+          id="prodGrid"
+          class="prod-grid">
+          <div
+            class="empty-state"
+            style="grid-column: 1/-1">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p style="font-weight: 700">Cargando menú...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FOOTER ══ -->
+    <footer class="footer-min">
+      <img
+        src="img/assets/logo.png"
+        alt="Logo" />
+      <p>© 2025 Maxi Guau Guau · Todos los derechos reservados</p>
+    </footer>
+
+    <!-- ══ BARRA CARRITO ══ -->
+    <div
+      class="cart-bar-wrap"
+      id="cartBarWrap">
+      <div class="cart-bar-inner">
+        <div>
+          <div class="cart-total-label">TOTAL PEDIDO</div>
+          <div
+            class="cart-total-val"
+            id="cartTotal">
+            $0
+          </div>
+        </div>
+        <button
+          class="btn-cart"
+          id="btnOpenCart"
+          onclick="abrirCarrito()"
+          disabled>
+          <i class="fas fa-shopping-basket"></i>
+          CARRITO
+          <span
+            class="cart-count"
+            id="cartCount">
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ MODAL CARRITO ══ -->
+    <div
+      class="modal-overlay"
+      id="modalCarrito"
+      style="display: none"
+      onclick="if (event.target === this) cerrarCarrito();">
+      <div
+        class="modal-sheet"
+        id="sheetCarrito">
+        <div class="modal-head">
+          <h2>
+            TU PEDIDO
+            <span>🛒</span>
+          </h2>
+          <button
+            class="btn-cerrar"
+            onclick="cerrarCarrito()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="cartItems"></div>
+          <div class="cart-modal-total">
+            <span class="cart-modal-total-label">Total:</span>
+            <span
+              class="cart-modal-total-val"
+              id="cartTotalModal">
+              $0
+            </span>
+          </div>
+          <button
+            class="btn-submit"
+            style="margin-top: 14px"
+            onclick="irACheckout()">
+            <i class="fas fa-arrow-right"></i>
+            IR A FINALIZAR
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MODAL CHECKOUT ══ -->
+    <div
+      class="modal-overlay"
+      id="modalCheckout"
+      style="display: none"
+      onclick="if (event.target === this) cerrarCheckout();">
+      <div
+        class="modal-sheet"
+        id="sheetCheckout">
+        <div class="modal-head">
+          <h2>
+            FINALIZAR
+            <span>PEDIDO</span>
+          </h2>
+          <button
+            class="btn-cerrar"
+            onclick="cerrarCheckout()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div
+            class="resumen-box"
+            id="checkoutResumen"></div>
+
+          <form
+            id="checkoutForm"
+            onsubmit="
+              event.preventDefault();
+              enviarPedido();
+            "
+            style="display: flex; flex-direction: column; gap: 14px">
+            <div>
+              <label class="form-label">
+                👤 Nombre
+                <span style="color: red">*</span>
+              </label>
+              <input
+                type="text"
+                id="chkNombre"
+                class="form-input"
+                required
+                placeholder="Ej. Juan Pérez" />
+            </div>
+
+            <div>
+              <label class="form-label">
+                📱 WhatsApp
+                <span style="color: red">*</span>
+              </label>
+              <input
+                type="tel"
+                id="chkWS"
+                class="form-input"
+                required
+                placeholder="Ej. 3001234567" />
+            </div>
+
+            <div>
+              <label
+                class="form-label"
+                style="display: flex; align-items: center; gap: 6px">
+                <span
+                  style="
+                    background: var(--amarillo);
+                    color: var(--azul);
+                    padding: 1px 7px;
+                    font-size: 0.6rem;
+                    letter-spacing: 1px;
+                    font-weight: 900;
+                  ">
+                  ESPECIAL
+                </span>
+                📝 Nota para la cocina
+              </label>
+              <textarea
+                id="chkNota"
+                class="nota-area"
+                rows="2"
+                placeholder="Sin cebolla, extra salsa, bien cocida..."></textarea>
+              <p class="nota-hint">
+                <i class="fas fa-info-circle"></i>
+                Esta nota llegará al mesero con tu pedido.
+              </p>
+            </div>
+
+            <div>
+              <label class="form-label">
+                💳 Método de pago
+                <span style="color: red">*</span>
+              </label>
+              <div class="pay-grid">
+                <div class="pay-opt">
+                  <input
+                    type="radio"
+                    name="pago"
+                    id="pagoEfe"
+                    value="Efectivo"
+                    checked
+                    onchange="toggleTransfer()" />
+                  <label for="pagoEfe">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Efectivo
+                  </label>
+                </div>
+                <div class="pay-opt">
+                  <input
+                    type="radio"
+                    name="pago"
+                    id="pagoTra"
+                    value="Transferencia"
+                    onchange="toggleTransfer()" />
+                  <label for="pagoTra">
+                    <i class="fas fa-mobile-screen"></i>
+                    Transferencia
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div
+              id="transferAlert"
+              style="display: none"
+              class="transfer-alert">
+              <i class="fas fa-info-circle"></i>
+              Envía el comprobante al
+              <a href="https://wa.me/573044212892">3044212892</a>
+              con tu número de Ticket.
+            </div>
+
+            <div class="total-row">
+              <span>Total a Pagar</span>
+              <span id="chkTotal">$0</span>
+            </div>
+
+            <button
+              type="submit"
+              class="btn-submit"
+              id="btnEnviar">
+              <i class="fas fa-paper-plane"></i>
+              ENVIAR PEDIDO
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ JS ══ -->
+    <script>
+      const db = firebase.firestore();
+      const NEGOCIO_ID = 'griviti_main';
+      const CACHE_MENU = 'mgCarritoMenu';
+      const CACHE_VER = 'mgMenuVersion';
+      const CACHE_CARRITO = 'mgCarrito';
+
+      const CATS = [
+        { id: 'hamburguesas', label: 'Hamburguesas', icon: 'fa-burger' },
+        { id: 'perros', label: 'Perros', icon: 'fa-hotdog' },
+        { id: 'salchipapas', label: 'Salchipapas', icon: 'fa-bowl-food' },
+        { id: 'bebidas', label: 'Bebidas', icon: 'fa-glass-water' },
+      ];
+
+      let state = {
+        catActual: 'hamburguesas',
+        productos: [],
+        carrito: [],
+        orderId: '',
+      };
+
+      /* ── UTILS ── */
+      const fmt = (n) => '$' + Number(n).toLocaleString('es-CO');
+      const precio = (v) => {
+        if (typeof v === 'number') return v;
+        const n = parseFloat(String(v).replace(/[$. ]/g, '').replace(',', '.'));
+        return isNaN(n) ? 0 : n;
+      };
+      function genId() {
+        const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let s = '';
+        for (let i = 0; i < 4; i++)
+          s += c[Math.floor(Math.random() * c.length)];
+        return '#WEB-' + s;
+      }
+      function modalCarritoAbierto() {
+        const o = document.getElementById('modalCarrito');
+        return o && o.style.display !== 'none';
+      }
+
+      /* ── CARRITO LOCAL ── */
+      function cargarCarritoLocal() {
+        try {
+          return JSON.parse(localStorage.getItem(CACHE_CARRITO) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+      function guardarCarritoLocal() {
+        localStorage.setItem(CACHE_CARRITO, JSON.stringify(state.carrito));
+      }
+
+      /* ── INIT ── */
+      async function init() {
+        state.orderId = genId();
+        document.getElementById('ticketId').innerText = state.orderId;
+        state.carrito = cargarCarritoLocal();
+
+        try {
+          const snap = await db.collection('negocios').doc(NEGOCIO_ID).get();
+          const data = snap.exists ? snap.data() : {};
+
+          if (data.pedidosWebActivos === false) {
+            document.getElementById('pausaScreen').style.display = 'flex';
+            document.getElementById('menuActivo').style.display = 'none';
+            document.getElementById('cartBarWrap').style.display = 'none';
+            return;
+          }
+
+          const verServidor = data.menuVersion || null;
+          const verLocal = localStorage.getItem(CACHE_VER);
+          const menuCache = localStorage.getItem(CACHE_MENU);
+
+          if (verServidor && verLocal === String(verServidor) && menuCache) {
+            state.productos = JSON.parse(menuCache);
+            console.log(' Menú cargado desde caché local');
+          } else {
+            const menuSnap = await db
+              .collection('negocios')
+              .doc(NEGOCIO_ID)
+              .collection('menu')
+              .doc('actual')
+              .get();
+            if (menuSnap.exists) {
+              state.productos = menuSnap.data().productos || [];
+              localStorage.setItem(CACHE_MENU, JSON.stringify(state.productos));
+              if (verServidor)
+                localStorage.setItem(CACHE_VER, String(verServidor));
+              console.log(' Menú actualizado desde Firestore');
+            }
+          }
+        } catch (e) {
+          console.warn('Error cargando menú:', e);
+          const menuCache = localStorage.getItem(CACHE_MENU);
+          if (menuCache) {
+            try {
+              state.productos = JSON.parse(menuCache);
+            } catch (_) {}
+          }
+        }
+
+        renderTabs();
+        renderProductos();
+        renderBarraCarrito();
+
+        // Sincronizar estado del toggle con Firestore
+        _inicializarStateToggle();
+        _monitorearCambiosToggle();
+      }
+
+      // Inicializar el estado visual del toggle basado en Firestore
+      async function _inicializarStateToggle() {
+        try {
+          const snap = await db.collection('negocios').doc(NEGOCIO_ID).get();
+          const data = snap.exists ? snap.data() : {};
+          const pedidosActivos = data.pedidosWebActivos !== false;
+          _actualizarVisualToggle(pedidosActivos);
+        } catch (e) {
+          console.error('Error al inicializar toggle:', e);
+        }
+      }
+
+      // Monitorear cambios en tiempo real desde Firestore
+      function _monitorearCambiosToggle() {
+        try {
+          db.collection('negocios')
+            .doc(NEGOCIO_ID)
+            .onSnapshot((doc) => {
+              if (doc.exists) {
+                const pedidosActivos = doc.data().pedidosWebActivos !== false;
+                _actualizarVisualToggle(pedidosActivos);
+              }
+            });
+        } catch (e) {
+          console.error('Error en listener de toggle:', e);
+        }
+      }
+
+      // Actualizar visual del toggle en el navbar
+      function _actualizarVisualToggle(activo) {
+        const toggleEl = document.getElementById('navTogglePedidos');
+        const textEl = document.getElementById('navTogglePedidosText');
+        if (!toggleEl) return;
+
+        if (activo) {
+          toggleEl.classList.remove('pausado');
+          toggleEl.classList.add('activo');
+          textEl.innerText = 'Pedidos: Abiertos';
+        } else {
+          toggleEl.classList.remove('activo');
+          toggleEl.classList.add('pausado');
+          textEl.innerText = 'Pedidos: Cerrados';
+        }
+      }
+
+      // Toggle de pedidos desde el navbar
+      window.togglePedidosWebDesdeNav = async function () {
+        const toggleEl = document.getElementById('navTogglePedidos');
+        if (!toggleEl) return;
+
+        const estaActivo = toggleEl.classList.contains('activo');
+        const nuevoEstado = !estaActivo;
+
+        try {
+          await db.collection('negocios').doc(NEGOCIO_ID).update({
+            pedidosWebActivos: nuevoEstado,
+          });
+
+          _actualizarVisualToggle(nuevoEstado);
+
+          if (!nuevoEstado) {
+            // Mostrar pantalla de pausa
+            document.getElementById('pausaScreen').style.display = 'flex';
+            document.getElementById('menuActivo').style.display = 'none';
+            document.getElementById('cartBarWrap').style.display = 'none';
+          } else {
+            // Esconder pantalla de pausa
+            document.getElementById('pausaScreen').style.display = 'none';
+            document.getElementById('menuActivo').style.display = 'block';
+            document.getElementById('cartBarWrap').style.display = 'flex';
+            renderProductos();
+          }
+        } catch (e) {
+          console.error('Error al cambiar estado:', e);
+          alert('Error: ' + e.message);
+        }
+      };
+
+      /* ── TABS ── */
+      function renderTabs() {
+        document.getElementById('catTabs').innerHTML = CATS.map(
+          (c) => `
+          <button class="cat-btn ${c.id === state.catActual ? 'active' : ''}" onclick="setCat('${c.id}')">
+            <i class="fas ${c.icon}"></i>${c.label}
+          </button>`,
+        ).join('');
+      }
+      window.setCat = function (id) {
+        state.catActual = id;
+        renderTabs();
+        renderProductos();
+      };
+
+      /* ── RENDER PRODUCTOS ── */
+      function renderProductos() {
+        const grid = document.getElementById('prodGrid');
+        const lista = state.productos.filter(
+          (p) => (p.categoria || '').toLowerCase() === state.catActual,
+        );
+
+        if (!lista.length) {
+          grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-box-open"></i><p>Sin productos en esta categoría.</p></div>`;
+          return;
+        }
+
+        grid.innerHTML = lista
+          .map((p, i) => {
+            const enCarrito = state.carrito.find(
+              (x) => String(x.id) === String(p.id),
+            );
+            const qty = enCarrito ? enCarrito.cantidad : 0;
+            const agotado = (p.stock || 0) <= 0;
+            const stockLeft = (p.stock || 0) - qty;
+            const maxStock = stockLeft <= 0;
+            const inCart = qty > 0;
+
+            /* Etiqueta: muestra la categoría capitalizada o "AGOTADO" */
+            const tagLabel = agotado
+              ? 'AGOTADO'
+              : (p.categoria || 'PRODUCTO').toUpperCase();
+
+            /* Imagen del producto o placeholder */
+            const imgSlot = p.imagen
+              ? `<div class="prod-img-wrap"><img src="${p.imagen}" alt="${p.nombre}" class="prod-img"></div>`
+              : `<div class="prod-img-placeholder"><span>📷</span><small>Próximamente</small></div>`;
+
+            return `
+          <div class="prod-card ${inCart ? 'en-carrito' : ''} fade-up" style="animation-delay:${i * 0.04}s">
+            ${imgSlot}
+            <div class="prod-body">
+              <span class="prod-tag ${agotado ? 'agotado' : ''}">${tagLabel}</span>
+              <div class="prod-name">${p.nombre}</div>
+              <div class="prod-desc">${p.descripcion || 'Una deliciosa opción para ti.'}</div>
+              <div class="prod-footer">
+                <div>
+                  <div class="prod-precio">${fmt(precio(p.precio))}</div>
+                  <div class="prod-stock ${(p.stock || 0) < 5 && !agotado ? 'low' : ''}">
+                    ${agotado ? 'AGOTADO' : `STOCK: ${p.stock || 0}`}
+                  </div>
+                </div>
+                ${
+                  agotado
+                    ? ''
+                    : `
+                <div class="qty">
+                  <button class="qty-btn"  onclick="cambiarQty('${p.id}',-1)" ${qty === 0 ? 'disabled' : ''}>−</button>
+                  <span class="qty-num">${qty > 0 ? qty : '·'}</span>
+                  <button class="qty-btn plus" onclick="cambiarQty('${p.id}',1)"  ${maxStock ? 'disabled' : ''}>+</button>
+                </div>`
+                }
+              </div>
+            </div>
+            ${inCart ? '<div class="prod-amarillo-bar"></div>' : ''}
+          </div>`;
+          })
+          .join('');
+      }
+
+      /* ── CAMBIAR CANTIDAD ── */
+      window.cambiarQty = function (id, delta) {
+        const prod = state.productos.find((p) => String(p.id) === String(id));
+        if (!prod) return;
+
+        const idx = state.carrito.findIndex((x) => String(x.id) === String(id));
+        if (idx === -1) {
+          if (delta < 0) return;
+          state.carrito.push({
+            id: prod.id,
+            nombre: prod.nombre,
+            precio: precio(prod.precio),
+            categoria: prod.categoria,
+            cantidad: 1,
+          });
+        } else {
+          const nueva = state.carrito[idx].cantidad + delta;
+          if (nueva > (prod.stock || 0)) return;
+          if (nueva <= 0) state.carrito.splice(idx, 1);
+          else state.carrito[idx].cantidad = nueva;
+        }
+
+        guardarCarritoLocal();
+        renderProductos();
+        renderBarraCarrito();
+
+        /* Si el modal carrito está abierto, refrescarlo */
+        if (modalCarritoAbierto()) {
+          if (state.carrito.length === 0) {
+            cerrarCarrito();
+          } else {
+            renderItemsCarrito();
+            actualizarTotalModal();
+          }
+        }
+      };
+
+      /* ── BARRA CARRITO ── */
+      function renderBarraCarrito() {
+        const total = state.carrito.reduce(
+          (s, i) => s + i.precio * i.cantidad,
+          0,
+        );
+        const count = state.carrito.reduce((s, i) => s + i.cantidad, 0);
+        document.getElementById('cartTotal').innerText = fmt(total);
+        document.getElementById('cartCount').innerText = count;
+        const btn = document.getElementById('btnOpenCart');
+        btn.disabled = count === 0;
+        btn.style.opacity = count === 0 ? '.4' : '1';
+      }
+
+      /* ── TOTAL MODAL CARRITO ── */
+      function actualizarTotalModal() {
+        const total = state.carrito.reduce(
+          (s, i) => s + i.precio * i.cantidad,
+          0,
+        );
+        document.getElementById('cartTotalModal').innerText = fmt(total);
+      }
+
+      /* ── MODAL CARRITO ── */
+      window.abrirCarrito = function () {
+        if (!state.carrito.length) return;
+        renderItemsCarrito();
+        actualizarTotalModal();
+        abrirModal('modalCarrito', 'sheetCarrito');
+      };
+      window.cerrarCarrito = function () {
+        cerrarModal('modalCarrito', 'sheetCarrito');
+      };
+
+      function renderItemsCarrito() {
+        const c = document.getElementById('cartItems');
+        if (!state.carrito.length) {
+          c.innerHTML =
+            '<p style="text-align:center;color:var(--gris);padding:20px;font-weight:700;">Tu carrito está vacío.</p>';
+          return;
+        }
+        c.innerHTML = state.carrito
+          .map(
+            (i) => `
+          <div class="cart-item">
+            <div style="flex:1;">
+              <div class="ci-name">${i.nombre}</div>
+              <div class="ci-price">${fmt(i.precio * i.cantidad)}</div>
+            </div>
+            <div class="qty">
+              <button class="qty-btn"      onclick="cambiarQty('${i.id}',-1)">−</button>
+              <span   class="qty-num">${i.cantidad}</span>
+              <button class="qty-btn plus" onclick="cambiarQty('${i.id}', 1)">+</button>
+            </div>
+          </div>`,
+          )
+          .join('');
+      }
+
+      /* ── CHECKOUT ── */
+      window.irACheckout = function () {
+        cerrarCarrito();
+        setTimeout(() => {
+          const total = state.carrito.reduce(
+            (s, i) => s + i.precio * i.cantidad,
+            0,
+          );
+          document.getElementById('chkTotal').innerText = fmt(total);
+          document.getElementById('checkoutResumen').innerHTML = `
+            <div class="resumen-title">RESUMEN DE TU PEDIDO</div>
+            ${state.carrito
+              .map(
+                (i) => `
+              <div class="resumen-row">
+                <span>${i.cantidad}× ${i.nombre}</span>
+                <span>${fmt(i.precio * i.cantidad)}</span>
+              </div>`,
+              )
+              .join('')}`;
+          abrirModal('modalCheckout', 'sheetCheckout');
+          toggleTransfer();
+        }, 380);
+      };
+      window.cerrarCheckout = function () {
+        cerrarModal('modalCheckout', 'sheetCheckout');
+      };
+      window.toggleTransfer = function () {
+        const isT =
+          document.querySelector('input[name="pago"]:checked').value ===
+          'Transferencia';
+        document.getElementById('transferAlert').style.display = isT
+          ? 'block'
+          : 'none';
+      };
+
+      /* ── ENVIAR PEDIDO ── */
+      window.enviarPedido = async function () {
+        const btn = document.getElementById('btnEnviar');
+        const nombre = document.getElementById('chkNombre').value.trim();
+        const ws = document.getElementById('chkWS').value.trim();
+        const pago = document.querySelector('input[name="pago"]:checked').value;
+        const nota = document.getElementById('chkNota').value.trim();
+        if (!nombre || !ws) return alert('Completa los datos requeridos.');
+
+        const total = state.carrito.reduce(
+          (s, i) => s + i.precio * i.cantidad,
+          0,
+        );
+        const pedido = {
+          idExterno: state.orderId,
+          nombre,
+          whatsapp: ws,
+          metodoPago: pago,
+          nota: nota || '',
+          items: state.carrito.map((i) => ({
+            id: i.id,
+            nombre: i.nombre,
+            precio: i.precio,
+            categoria: i.categoria,
+            cantidad: i.cantidad,
+          })),
+          total,
+          estado: 'pendiente',
+          origen: 'web',
+          fecha: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+
+        try {
+          btn.disabled = true;
+          btn.innerHTML =
+            '<i class="fas fa-circle-notch fa-spin"></i> PROCESANDO...';
+          await db.collection('pedidos_externos').add(pedido);
+          alert(
+            `✅ ¡Pedido ${state.orderId} enviado!\nEn breve lo preparamos 🐾`,
+          );
+          state.carrito = [];
+          guardarCarritoLocal();
+          state.orderId = genId();
+          document.getElementById('ticketId').innerText = state.orderId;
+          renderProductos();
+          renderBarraCarrito();
+          cerrarCheckout();
+          document.getElementById('checkoutForm').reset();
+          toggleTransfer();
+        } catch (e) {
+          console.error(e);
+          alert('❌ Error: ' + e.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-paper-plane"></i> ENVIAR PEDIDO';
+        }
+      };
+
+      /* ── MODAL HELPERS ── */
+      function abrirModal(overlayId, sheetId) {
+        const o = document.getElementById(overlayId);
+        const s = document.getElementById(sheetId);
+        o.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => s.classList.add('open'));
+      }
+      function cerrarModal(overlayId, sheetId) {
+        const o = document.getElementById(overlayId);
+        const s = document.getElementById(sheetId);
+        s.classList.remove('open');
+        setTimeout(() => {
+          o.style.display = 'none';
+          document.body.style.overflow = '';
+        }, 380);
+      }
+
+      // Cargar descripción del negocio desde Firestore
+      async function cargarDescripcionNegocio() {
+        try {
+          const db = firebase.firestore();
+          const negocioId = localStorage.getItem('negocioId') || 'grivti_main';
+          const doc = await db.collection('negocios').doc(negocioId).get();
+
+          if (doc.exists && doc.data().descripcion) {
+            document.getElementById('negocioDesc').innerText =
+              doc.data().descripcion;
+          }
+        } catch (e) {
+          console.error('Error cargando descripción:', e);
+        }
+      }
+
+      // Cargar descripción cuando la página esté lista
+      document.addEventListener('DOMContentLoaded', cargarDescripcionNegocio);
+
+      /* ── FIREBASE AUTH → INIT ── */
+      firebase.auth().onAuthStateChanged((u) => {
+        if (u) init();
+        else
+          firebase
+            .auth()
+            .signInAnonymously()
+            .catch(() => {
+              document.getElementById('prodGrid').innerHTML =
+                `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-exclamation-circle"></i><p>Error de permisos. Recarga la página.</p></div>`;
+            });
+      });
+    </script>
+  </body>
+</html>
+>>>>>>> a3c41e4abcda6d5c2116f60e540cc99ee0c705bb

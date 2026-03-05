@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 :root {
   /* Paleta de colores Maxi Guau Guau */
   --primary-dark: #0d47a1;
@@ -40,3 +41,47 @@ body {
   margin: 0;
   overflow-x: hidden;
 }
+=======
+:root {
+  /* Paleta de colores Maxi Guau Guau */
+  --primary-dark: #0d47a1;
+  --primary-soft: #1e88e5;
+  --bg-light: #f1f5f9;
+  --warm-gray: #bfbab0;
+  --accent: #f97316;
+
+  /* Variaciones y neutros */
+  --white: #ffffff;
+  --text-main: #334155;
+  --text-muted: #64748b;
+  --border-color: rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: var(--bg-light);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+}
+>>>>>>> a3c41e4abcda6d5c2116f60e540cc99ee0c705bb
