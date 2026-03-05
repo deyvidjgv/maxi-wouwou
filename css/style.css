@@ -2313,21 +2313,24 @@ button:active {
 .inventory-actions-modern {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
 }
 
 .inv-btn-action {
   flex: 1;
+  min-width: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px;
-  border: 1px solid #e2e8f0;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1.5px solid #e2e8f0;
   background: white;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #475569;
 }
@@ -2335,18 +2338,34 @@ button:active {
 .inv-btn-action i {
   width: 16px;
   height: 16px;
+  flex-shrink: 0;
+}
+
+.inv-btn-action span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .inv-btn-action:hover {
   border-color: var(--primary);
   color: var(--primary);
-  background: rgba(30, 58, 138, 0.02);
+  background: rgba(30, 136, 229, 0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(30, 136, 229, 0.12);
+}
+
+.inv-btn-action.btn-danger-icon {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
 }
 
 .inv-btn-action.btn-danger-icon:hover {
   border-color: #ef4444;
-  color: #ef4444;
-  background: #fef2f2;
+  color: white;
+  background: #ef4444;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
 }
 
 /* ===== SECCIONES DE INVENTARIO ===== */
@@ -3008,13 +3027,16 @@ button:active {
   transform: scale(1.05);
 }
 
-.btn-danger-icon {
-  color: #fffdfd !important;
+.btn-carrito-danger {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
 }
 
-.btn-danger-icon:hover {
-  background: #fee2e2 !important;
-  color: #dc2626 !important;
+.btn-carrito-danger:hover {
+  background: #ef4444 !important;
+  color: white !important;
+  border-color: #ef4444 !important;
 }
 
 /* --- CARRITO ITEMS --- */

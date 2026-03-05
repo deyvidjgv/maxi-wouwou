@@ -22,22 +22,22 @@ const app = {
       'https://img.icons8.com/external-icongeek26-outline-colour-icongeek26/64/external-stir-fry-mexican-food-icongeek26-outline-colour-icongeek26.png',
     bebidas: 'https://img.icons8.com/pulsar-gradient/48/soda-water.png',
   },
-  // Banco de imágenes disponibles por categoría (rutas locales en /img/)
+  // Banco de imágenes disponibles por categoría (rutas locales en /img/productos/)
   IMAGE_BANK: {
     hamburguesas: [
       // Agrega aquí las fotos reales cuando las tengas, ej.:
-      // { src: 'img/hamburguesa-sencilla.png', label: 'Sencilla' },
+      // { src: 'img/productos/hamburguesa-sencilla.png', label: 'Sencilla' },
     ],
     perros: [
-      { src: 'img/perro-sencillo.png', label: 'Perro Sencillo' },
-      { src: 'img/perro-doble.png', label: 'Perro Doble' },
-      { src: 'img/perro-tocineta.png', label: 'Perro Tocineta' },
+      { src: 'img/productos/perro-sencillo.png', label: 'Perro Sencillo' },
+      { src: 'img/productos/perro-doble.png', label: 'Perro Doble' },
+      { src: 'img/productos/perro-tocineta.png', label: 'Perro Tocineta' },
     ],
     salchipapas: [
-      // { src: 'img/salchipapa-clasica.png', label: 'Clásica' },
+      // { src: 'img/productos/salchipapa-clasica.png', label: 'Clásica' },
     ],
     bebidas: [
-      // { src: 'img/coca-cola.png', label: 'Coca-Cola' },
+      // { src: 'img/productos/coca-cola.png', label: 'Coca-Cola' },
     ],
     otros: [],
   },
@@ -566,12 +566,12 @@ const app = {
         botonesCont = `
             <button onclick="app.incrementarItem('${i.uid}')" class="btn-icon-sm"><i data-lucide="plus-circle"></i></button>
             <button onclick="app.decrementarItem('${i.uid}')" class="btn-icon-sm"><i data-lucide="minus-circle"></i></button>
-            <button onclick="app.borrarItem('${i.uid}')" class="btn-icon-sm btn-danger-icon"><i data-lucide="trash-2"></i></button>`;
+            <button onclick="app.borrarItem('${i.uid}')" class="btn-icon-sm btn-carrito-danger"><i data-lucide="trash-2"></i></button>`;
       } else {
         botonesCont = `
             <button onclick="app.decrementarItem('${i.uid}')" class="btn-icon-sm"><i data-lucide="minus-circle"></i></button>
             <button onclick="app.toggleListo('${i.uid}')" class="btn-icon-sm">${i.entregado ? '✅' : '<i data-lucide="chef-hat"></i>'}</button>
-            <button onclick="app.borrarItem('${i.uid}')" class="btn-icon-sm btn-danger-icon"><i data-lucide="trash-2"></i></button>`;
+            <button onclick="app.borrarItem('${i.uid}')" class="btn-icon-sm btn-carrito-danger"><i data-lucide="trash-2"></i></button>`;
       }
 
       cont.innerHTML += `
@@ -1450,20 +1450,6 @@ const app = {
     this.renderInventarioDash();
   },
 
-  eliminarItem(id) {
-    if (confirm('⚠️ ¿Eliminar producto?')) {
-      const idStr = String(id); // Ensure ID is string for comparison
-      this.productos = this.productos.filter((p) => String(p.id) !== idStr);
-      this.negocioRef
-        .collection('menu')
-        .doc('actual')
-        .set({ productos: this.productos }, { merge: true });
-      this.renderInventarioDash(); // Recarga el inventario
-      if (this.currentInvCat) this.renderInventoryList(this.currentInvCat);
-      this.notificar('✅ Producto eliminado');
-    }
-  },
-
   // --- VALIDACIÓN DE SEGURIDAD ELIMINADA ---
 
   ajStockSeguro(id, v) {
@@ -2104,12 +2090,13 @@ const app = {
              <i data-lucide="dollar-sign" style="width: 16px;"></i>
              <span>Precio</span>
            </button>
-           <button class="inv-btn-action" onclick="app.editarImagenProducto('${p.id}')" title="Cambiar Foto" style="flex: 0.8;">
+           <button class="inv-btn-action" onclick="app.editarImagenProducto('${p.id}')" title="Cambiar Foto">
              <i data-lucide="image" style="width: 16px;"></i>
              <span>Foto</span>
            </button>
-           <button class="inv-btn-action btn-danger-icon" style="flex: 0.4;" onclick="app.eliminarItem('${p.id}')">
+           <button class="inv-btn-action btn-danger-icon" onclick="app.eliminarItem('${p.id}')" title="Eliminar Producto">
              <i data-lucide="trash-2" style="width: 16px;"></i>
+             <span>Eliminar</span>
            </button>
         </div>
       `;
@@ -2191,7 +2178,7 @@ const app = {
             ? `
           <p style="color:#94a3b8; font-size:0.85rem; padding:16px; background:#f8fafc; border-radius:10px; margin-bottom:14px;">
             No hay imágenes en el banco para <strong>${prod.categoria}</strong>.<br>
-            Agrega fotos a <code>img/</code> y regístralas en <code>IMAGE_BANK</code> dentro de <code>app.js</code>.
+            Agrega fotos a <code>img/productos/</code> y regístralas en <code>IMAGE_BANK</code> dentro de <code>app.js</code>.
           </p>`
             : ''
         }
@@ -2270,8 +2257,29 @@ const app = {
   },
 
   async eliminarItem(id) {
-    if (!confirm('¿Seguro que desea eliminar este producto?')) return;
+    if (
+      !confirm(
+        '⚠️ ¿Seguro que deseas ELIMINAR este producto? Esta acción no se puede deshacer.',
+      )
+    )
+      return;
+
+    const password = prompt(
+      'Para eliminar el producto, ingresa tu contraseña de administrador:',
+    );
+    if (!password) return;
+
     try {
+      const email = firebase.auth().currentUser?.email;
+      if (!email) {
+        alert('❌ Error: No hay usuario logueado');
+        return;
+      }
+
+      // Validar contraseña reautenticando
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+
+      // Contraseña correcta, proceder con eliminación
       this.productos = this.productos.filter(
         (p) => String(p.id) !== String(id),
       );
@@ -2281,10 +2289,11 @@ const app = {
         .collection('menu')
         .doc('actual');
       await menuRef.update({ productos: this.productos });
-      this.notificar('Producto eliminado');
+      this.notificar('✅ Producto eliminado correctamente');
       this.selectInventoryCat(this.currentInvCat);
     } catch (e) {
-      alert('Error: ' + e);
+      console.error('Error:', e);
+      alert('❌ Contraseña incorrecta o error al eliminar el producto');
     }
   },
 
