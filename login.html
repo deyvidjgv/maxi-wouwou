@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Login - Maxi Guau Guau</title>
+    <link
+      rel="stylesheet"
+      href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="designinspo/variables.css" />
+    <link
+      rel="stylesheet"
+      href="designinspo/layout.css" />
+    <link
+      rel="stylesheet"
+      href="designinspo/components.css" />
+    <link
+      rel="stylesheet"
+      href="designinspo/responsive.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet" />
+  </head>
+  <body>
+    <div
+      id="vistaLogin"
+      class="pantalla-login activa">
+      <div class="card-login">
+        <h1>Login</h1>
+        <div id="formAuth">
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="Correo electrónico" />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Contraseña"
+            style="margin-top: 10px" />
+          <button
+            class="btn-confirmar"
+            id="btnLogin"
+            style="margin-top: 15px">
+            ENTRAR
+          </button>
+          <p
+            id="loginError"
+            style="
+              color: #ef4444;
+              font-size: 0.8rem;
+              margin-top: 15px;
+              display: none;
+            "></p>
+        </div>
+      </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/login.js"></script>
+  </body>
+</html>
