@@ -414,13 +414,18 @@ body {
 /* ── PRODUCT GRID ── */
 .prod-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 12px;
   margin-top: 14px;
 }
 @media (min-width: 480px) {
   .prod-grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  .prod-grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   }
 }
 
@@ -428,19 +433,22 @@ body {
 .prod-card {
   background: var(--blanco);
   border-left: 4px solid transparent;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  transition: all 0.22s ease;
   overflow: hidden;
+  border-radius: 4px;
 }
 .prod-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(13, 71, 161, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(13, 71, 161, 0.14);
 }
 .prod-card.en-carrito {
   border-left-color: var(--amarillo);
+  border-bottom-color: var(--amarillo);
 }
 .prod-body {
-  padding: 14px;
+  padding: 12px 14px 14px;
 }
 .prod-tag {
   font-size: 0.55rem;
@@ -451,7 +459,7 @@ body {
   background: #fff7d6;
   color: #92650a;
   display: inline-block;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 .prod-tag.agotado {
   background: #fee2e2;
@@ -459,16 +467,22 @@ body {
 }
 .prod-name {
   font-weight: 900;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #1e293b;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
+  line-height: 1.25;
 }
 .prod-desc {
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: var(--gris);
   font-style: italic;
   margin-bottom: 10px;
-  line-height: 1.4;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .prod-footer {
   display: flex;
@@ -479,12 +493,12 @@ body {
 }
 .prod-precio {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--azul);
   letter-spacing: 1px;
 }
 .prod-stock {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 900;
   color: #cbd5e0;
   text-transform: uppercase;
@@ -982,45 +996,47 @@ body {
 /* ── IMAGEN DE PRODUCTO ── */
 .prod-img-wrap {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: 12px 12px 0 0;
+  border-radius: 0;
   background: #f0f4ff;
   flex-shrink: 0;
+  position: relative;
 }
 .prod-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.3s ease;
+  transition: transform 0.35s ease;
 }
 .prod-card:hover .prod-img {
-  transform: scale(1.04);
+  transform: scale(1.06);
 }
 
 /* Placeholder cuando el producto no tiene foto */
 .prod-img-placeholder {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: 12px 12px 0 0;
-  background: linear-gradient(135deg, #e8f0fe 0%, #f5f7ff 100%);
+  aspect-ratio: 4 / 3;
+  border-radius: 0;
+  background: linear-gradient(135deg, #e8f0fe 0%, #dde8ff 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 6px;
   flex-shrink: 0;
+  border-bottom: 2px solid #c8d8ff;
 }
 .prod-img-placeholder span {
-  font-size: 1.8rem;
-  opacity: 0.5;
+  font-size: 2.2rem;
+  opacity: 0.4;
 }
 .prod-img-placeholder small {
-  font-size: 0.62rem;
-  font-weight: 700;
+  font-size: 0.6rem;
+  font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.15em;
   color: #94a3b8;
 }
 

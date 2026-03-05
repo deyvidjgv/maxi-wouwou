@@ -22,22 +22,22 @@ const app = {
       'https://img.icons8.com/external-icongeek26-outline-colour-icongeek26/64/external-stir-fry-mexican-food-icongeek26-outline-colour-icongeek26.png',
     bebidas: 'https://img.icons8.com/pulsar-gradient/48/soda-water.png',
   },
-  // Banco de imágenes disponibles por categoría (rutas locales en /img/)
+  // Banco de imágenes disponibles por categoría (rutas locales en /img/productos/)
   IMAGE_BANK: {
     hamburguesas: [
       // Agrega aquí las fotos reales cuando las tengas, ej.:
-      // { src: 'img/hamburguesa-sencilla.png', label: 'Sencilla' },
+      // { src: 'img/productos/hamburguesa-sencilla.png', label: 'Sencilla' },
     ],
     perros: [
-      { src: 'img/perro-sencillo.png', label: 'Perro Sencillo' },
-      { src: 'img/perro-doble.png', label: 'Perro Doble' },
-      { src: 'img/perro-tocineta.png', label: 'Perro Tocineta' },
+      { src: 'img/productos/perro-sencillo.png', label: 'Perro Sencillo' },
+      { src: 'img/productos/perro-doble.png', label: 'Perro Doble' },
+      { src: 'img/productos/perro-tocineta.png', label: 'Perro Tocineta' },
     ],
     salchipapas: [
-      // { src: 'img/salchipapa-clasica.png', label: 'Clásica' },
+      // { src: 'img/productos/salchipapa-clasica.png', label: 'Clásica' },
     ],
     bebidas: [
-      // { src: 'img/coca-cola.png', label: 'Coca-Cola' },
+      // { src: 'img/productos/coca-cola.png', label: 'Coca-Cola' },
     ],
     otros: [],
   },
@@ -1966,6 +1966,15 @@ const app = {
     lucide.createIcons();
   },
 
+  // Normaliza rutas antiguas img/xxx → img/productos/xxx.
+  // Las URLs externas (http/https) y Storage se dejan intactas.
+  _fixImgPath(src) {
+    if (!src) return src;
+    if (src.startsWith('http') || src.startsWith('img/productos/')) return src;
+    if (src.startsWith('img/')) return 'img/productos/' + src.slice(4);
+    return src;
+  },
+
   renderInventoryList(cat) {
     const container = document.getElementById('inventory-list-container-main');
     if (!container) return;
@@ -2006,8 +2015,9 @@ const app = {
       const stockStatus = p.stock < 10 ? 'low-stock' : 'normal-stock';
 
       // Miniatura de imagen
-      const thumbHtml = p.imagen
-        ? `<img src="${p.imagen}" alt="foto" style="width:100%; height:80px; object-fit:contain; background:#f8fafc; border-radius:8px; margin-bottom:8px;">`
+      const imgSrc = this._fixImgPath(p.imagen);
+      const thumbHtml = imgSrc
+        ? `<img src="${imgSrc}" alt="foto" style="width:100%; height:80px; object-fit:contain; background:#f8fafc; border-radius:8px; margin-bottom:8px;">`
         : `<div style="width:100%; height:60px; border-radius:8px; margin-bottom:8px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; font-size:0.72rem; color:#94a3b8; font-weight:700;">SIN FOTO</div>`;
 
       item.innerHTML = `

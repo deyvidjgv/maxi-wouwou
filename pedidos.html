@@ -34,17 +34,6 @@
           alt="Maxi Guau Guau" />
         <span>MAXI GUAU GUAU</span>
       </a>
-      <div class="nav-status-container">
-        <div
-          id="navTogglePedidos"
-          class="nav-toggle-status activo"
-          onclick="
-            window.togglePedidosWebDesdeNav && window.togglePedidosWebDesdeNav()
-          ">
-          <i class="fas fa-power-off"></i>
-          <span id="navTogglePedidosText">Pedidos: Abiertos</span>
-        </div>
-      </div>
       <a
         href="https://wa.me/573044212892"
         target="_blank"
@@ -81,7 +70,7 @@
         </div>
         <p id="negocioDesc">
           Comida rápida local hecha con amor. Ingredientes frescos, sabor
-          auténtico y atención de calidad en cada pedido. 🐾
+          auténtico y atención de calidad en cada pedido.
         </p>
       </div>
       <div class="info-card">
@@ -92,9 +81,7 @@
         <p>
           📍 Cúcuta, Norte de Santander
           <br />
-          🕐 Lun–Vie 12pm–9pm
-          <br />
-          🕐 Sáb–Dom 11am–10pm
+          🕐 Martes a Domingo 6:00 PM - 11:00 PM
         </p>
       </div>
       <div class="info-card">
@@ -430,6 +417,15 @@
 
       /* ── UTILS ── */
       const fmt = (n) => '$' + Number(n).toLocaleString('es-CO');
+      /* Normaliza rutas antiguas img/xxx.png → img/productos/xxx.png
+         Deja intactas las URLs externas (http/https) y las que ya son correctas */
+      const fixImgPath = (src) => {
+        if (!src) return src;
+        if (src.startsWith('http') || src.startsWith('img/productos/'))
+          return src;
+        if (src.startsWith('img/')) return 'img/productos/' + src.slice(4);
+        return src;
+      };
       const precio = (v) => {
         if (typeof v === 'number') return v;
         const n = parseFloat(String(v).replace(/[$. ]/g, '').replace(',', '.'));
@@ -499,11 +495,26 @@
             }
           }
         } catch (e) {
-          console.warn('Error cargando menú:', e);
+          console.error('CRITICAL: Error cargando menú desde Firestore:', e);
+          const grid = document.getElementById('prodGrid');
+          const errMsg =
+            e.code === 'permission-denied'
+              ? 'Error de permisos en Firebase. ¿Activaste el acceso Anónimo y revisaste las reglas?'
+              : 'Error de conexión: ' + e.message;
+
+          grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p style="font-weight: 700">${errMsg}</p>
+            <small>${e.code || ''}</small>
+          </div>`;
+
           const menuCache = localStorage.getItem(CACHE_MENU);
           if (menuCache) {
             try {
               state.productos = JSON.parse(menuCache);
+              console.log(
+                ' INFO: Cargando productos desde caché como respaldo.',
+              );
             } catch (_) {}
           }
         }
@@ -639,9 +650,10 @@
               : (p.categoria || 'PRODUCTO').toUpperCase();
 
             /* Imagen del producto o placeholder */
-            const imgSlot = p.imagen
-              ? `<div class="prod-img-wrap"><img src="${p.imagen}" alt="${p.nombre}" class="prod-img"></div>`
-              : `<div class="prod-img-placeholder"><span>📷</span><small>Próximamente</small></div>`;
+            const imgSrc = fixImgPath(p.imagen);
+            const imgSlot = imgSrc
+              ? `<div class="prod-img-wrap"><img src="${imgSrc}" alt="${p.nombre}" class="prod-img"></div>`
+              : `<div class="prod-img-placeholder"><span>🍔</span><small>Próximamente</small></div>`;
 
             return `
           <div class="prod-card ${inCart ? 'en-carrito' : ''} fade-up" style="animation-delay:${i * 0.04}s">
@@ -887,7 +899,7 @@
       async function cargarDescripcionNegocio() {
         try {
           const db = firebase.firestore();
-          const negocioId = localStorage.getItem('negocioId') || 'grivti_main';
+          const negocioId = 'griviti_main';
           const doc = await db.collection('negocios').doc(negocioId).get();
 
           if (doc.exists && doc.data().descripcion) {
@@ -904,15 +916,28 @@
 
       /* ── FIREBASE AUTH → INIT ── */
       firebase.auth().onAuthStateChanged((u) => {
-        if (u) init();
-        else
+        if (u) {
+          console.log(
+            ' AUTH: Usuario detectado:',
+            u.isAnonymous ? 'Anónimo' : 'Registrado',
+            u.uid,
+          );
+          init();
+        } else {
+          console.log(' AUTH: Sin sesión. Intentando inicio anónimo...');
           firebase
             .auth()
             .signInAnonymously()
-            .catch(() => {
+            .then(() => console.log(' AUTH: Inicio anónimo exitoso.'))
+            .catch((e) => {
+              console.error(' AUTH ERROR:', e);
               document.getElementById('prodGrid').innerHTML =
-                `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-exclamation-circle"></i><p>Error de permisos. Recarga la página.</p></div>`;
+                `<div class="empty-state" style="grid-column:1/-1;">
+                  <i class="fas fa-user-slash"></i>
+                  <p>No se pudo iniciar sesión de invitado. ${e.message}</p>
+                </div>`;
             });
+        }
       });
     </script>
   </body>
