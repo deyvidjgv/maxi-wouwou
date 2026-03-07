@@ -440,6 +440,95 @@ const app = {
     return isNaN(num) ? 0 : num;
   },
 
+  // ── VALIDACIONES Y AUDITORÍA DE DINERO ──
+  validarPedidoWeb(pedido) {
+    const errores = [];
+
+    // Validar estructura básica
+    if (!pedido.idExterno) errores.push('ID externo faltante');
+    if (!pedido.nombre) errores.push('Nombre del cliente faltante');
+    if (
+      !pedido.items ||
+      !Array.isArray(pedido.items) ||
+      pedido.items.length === 0
+    ) {
+      errores.push('Items vacíos o inválidos');
+    }
+
+    // Validar total
+    const total = this.parseMonto(pedido.total);
+    if (total <= 0 || isNaN(total)) {
+      errores.push(`Total inválido: ${pedido.total}`);
+    }
+
+    // Validar items y recalcular total
+    let totalCalculado = 0;
+    if (Array.isArray(pedido.items)) {
+      pedido.items.forEach((item, idx) => {
+        const precio = this.parseMonto(item.precio);
+        const cantidad = Number(item.cantidad) || 0;
+
+        if (precio < 0) errores.push(`Item ${idx}: precio negativo`);
+        if (cantidad <= 0) errores.push(`Item ${idx}: cantidad inválida`);
+        if (!item.nombre) errores.push(`Item ${idx}: nombre faltante`);
+
+        totalCalculado += precio * cantidad;
+      });
+    }
+
+    // Verificar que el total coincida con el cálculo
+    if (Math.abs(totalCalculado - total) > 1) {
+      errores.push(
+        `Discrepancia en total: ${total} vs calculado ${totalCalculado}`,
+      );
+    }
+
+    // Validar método de pago
+    const metodosValidos = ['Efectivo', 'Transferencia'];
+    if (!metodosValidos.includes(pedido.metodoPago)) {
+      errores.push(`Método de pago inválido: ${pedido.metodoPago}`);
+    }
+
+    return {
+      valido: errores.length === 0,
+      errores,
+      totalValidado: totalCalculado,
+    };
+  },
+
+  auditarRegistroCaja(regCaja) {
+    const errores = [];
+
+    if (!regCaja.total || regCaja.total <= 0) {
+      errores.push('Total de caja inválido');
+    }
+
+    if (regCaja.pago === 'Efectivo') {
+      const cashRecibido = this.parseMonto(regCaja.cashReceived || 0);
+      const total = this.parseMonto(regCaja.total);
+      if (cashRecibido < total) {
+        errores.push('Efectivo recibido menor al total');
+      }
+    }
+
+    if (regCaja.pago === 'Transferencia') {
+      const transferAmount = this.parseMonto(regCaja.transferAmount || 0);
+      const total = this.parseMonto(regCaja.total);
+      if (transferAmount !== total) {
+        errores.push('Monto de transferencia no coincide con total');
+      }
+    }
+
+    if (!regCaja.items || regCaja.items.length === 0) {
+      errores.push('Registro sin items');
+    }
+
+    return {
+      valido: errores.length === 0,
+      errores,
+    };
+  },
+
   getFechaHoy() {
     const d = new Date();
     return d.toISOString().split('T')[0]; // YYYY-MM-DD (Universal)
@@ -1326,45 +1415,125 @@ const app = {
 
     // Find doc ID ensuring we have a match
     const pedido = this.pedidosWeb.find((x) => x.id === docId);
-    if (!pedido) return;
+    if (!pedido) {
+      alert('Error: Pedido no encontrado.');
+      return;
+    }
+
+    // ── VALIDAR INTEGRIDAD DEL PEDIDO ──
+    const validacion = this.validarPedidoWeb(pedido);
+    if (!validacion.valido) {
+      alert(
+        `⚠️ El pedido tiene errores y no puede procesarse:\n\n${validacion.errores.join(
+          '\n',
+        )}`,
+      );
+      return;
+    }
+
+    // Validar datos del pedido
+    if (!pedido.items || pedido.items.length === 0) {
+      alert('Error: El pedido no tiene ítems. Verifica los datos.');
+      return;
+    }
+
+    if (!pedido.total || pedido.total <= 0 || isNaN(pedido.total)) {
+      alert('Error: El total del pedido es inválido. Verifica los datos.');
+      return;
+    }
 
     const hoy = new Date();
     const hoyString = this.getFechaHoy();
 
-    // Format required for 'pedidos' daily log
+    // Calcular totales correctamente
+    const totalMonto = Number(pedido.total);
+    const esEfectivo = pedido.metodoPago === 'Efectivo';
+    const esTransferencia = pedido.metodoPago === 'Transferencia';
+
+    // Format required for 'pedidos' daily log - MEJORADO
     const regCaja = {
       mesa: 'WEB', // Represents Web Source
       mesero: 'Auto',
       cobradoPor: this.nombreUsuario || 'Admin',
-      items: pedido.items,
-      total: pedido.total || 0,
-      subtotal: pedido.total || 0,
+      items: pedido.items.map((item) => ({
+        id: item.id,
+        nombre: item.nombre,
+        precio: Number(item.precio),
+        cantidad: Number(item.cantidad),
+        categoria: item.categoria,
+        subtotal: Number(item.precio) * Number(item.cantidad),
+      })),
+      total: totalMonto,
+      subtotal: totalMonto,
       propina: 0,
       cantLlevar: 0,
       pago: pedido.metodoPago || 'Efectivo',
-      cashReceived: pedido.metodoPago === 'Efectivo' ? pedido.total || 0 : 0,
+      cashReceived: esEfectivo ? totalMonto : 0,
       change: 0,
-      transferRef: pedido.idExterno || '',
-      transferAmount:
-        pedido.metodoPago === 'Transferencia' ? pedido.total || 0 : 0,
-      fecha: hoy.toLocaleString(),
+      transferRef: esTransferencia ? pedido.idExterno || '' : '',
+      transferAmount: esTransferencia ? totalMonto : 0,
       fechaDia: hoyString,
-      fechaCierre: hoy.toLocaleString(),
+      fecha: hoy.toLocaleString('es-CO'),
+      fechaCierre: hoy.toLocaleString('es-CO'),
       timestamp: Date.now(),
       esWeb: true,
+      webOrderId: pedido.idExterno || '',
+      clienteNombre: pedido.nombre || 'Cliente Web',
+      clienteWhatsapp: pedido.whatsapp || '',
+      tipoEntrega: pedido.tipoEntrega || 'Para llevar',
+      direccionEntrega: pedido.direccion || '',
+      notasCliente: pedido.nota || '',
+      horaCreacionWeb: pedido.horaCreacion || hoy.toLocaleTimeString('es-CO'),
     };
 
+    // ── VALIDAR REGISTRO DE CAJA ──
+    const auditoria = this.auditarRegistroCaja(regCaja);
+    if (!auditoria.valido) {
+      alert(
+        `❌ Error en el registro de caja:\n\n${auditoria.errores.join(
+          '\n',
+        )}\n\nNo se procesará el pago.`,
+      );
+      return;
+    }
+
     try {
-      await this.negocioRef.collection('pedidos').add(regCaja);
+      // Step 1: Agregar registro a caja
+      const cajaRef = await this.negocioRef.collection('pedidos').add(regCaja);
+      if (!cajaRef)
+        throw new Error('Error: No se pudo crear el registro en caja.');
+
+      // Step 2: Actualizar estado del pedido web a 'completado'
       const extRef = firebase
         .firestore()
         .collection('pedidos_externos')
         .doc(docId);
-      await extRef.update({ estado: 'completado' });
-      this.notificar('✅ Pedido WEB ingresado a caja correctamente.');
+
+      await extRef.update({
+        estado: 'completado',
+        completadoEn: firebase.firestore.FieldValue.serverTimestamp(),
+        registroCajaId: cajaRef.id, // Vincular con registro de caja
+      });
+
+      // Step 3: Verificar que se completó
+      const verificacion = await extRef.get();
+      if (verificacion.data().estado !== 'completado') {
+        throw new Error('Error: No se pudo actualizar el estado del pedido.');
+      }
+
+      this.notificar(
+        `✅ Pedido WEB ${pedido.idExterno || docId} registrado en caja correctamente.\nMonto: $${totalMonto.toLocaleString()}\nMétodo: ${pedido.metodoPago}`,
+      );
+
+      // Actualizar vista
+      this.renderPedidosWeb();
     } catch (e) {
       console.error('Error al completar pedido web:', e);
-      alert('Hubo un error completando el pedido web: ' + e.message);
+      alert(
+        '❌ Error: ' +
+          (e.message ||
+            'Hubo un error completando el pedido web. Intenta de nuevo.'),
+      );
     }
   },
 

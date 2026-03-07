@@ -70,7 +70,7 @@
         </div>
         <p id="negocioDesc">
           Comida rápida local hecha con amor. Ingredientes frescos, sabor
-          auténtico y atención de calidad en cada pedido. 🐾
+          auténtico y atención de calidad en cada pedido. 
         </p>
       </div>
       <div class="info-card">
@@ -78,12 +78,12 @@
           <i class="fas fa-map-marker-alt"></i>
           UBICACIÓN
         </div>
-        <p>
-          📍 Cúcuta, Norte de Santander
+        <br>
+          <i class="fas fa-map-marker-alt"></i> Cúcuta, Norte de Santander <br/>
+          Barrio Bocono parte alta - Calle 2 #26 - 16
           <br />
-          🕐 Lun–Vie 12pm–9pm
-          <br />
-          🕐 Sáb–Dom 11am–10pm
+          <i class="fas fa-clock"></i> Martes a Domingo 5pm–12pm
+
         </p>
       </div>
       <div class="info-card">
@@ -92,7 +92,7 @@
           CONTACTO
         </div>
         <p>
-          📞
+          <i class="fas fa-phone-alt"></i>
           <a href="tel:3044212892">304 421 2892</a>
           <br />
           <a
@@ -121,7 +121,7 @@
         id="pausaScreen"
         style="display: none"
         class="pausa">
-        <div class="pausa-icon">⏸</div>
+        <div class="pausa-icon"><i class="fas fa-pause"></i></div>
         <h2>PEDIDOS PAUSADOS</h2>
         <p>
           En este momento no estamos recibiendo pedidos en línea. ¡Pronto
@@ -219,7 +219,7 @@
         <div class="modal-head">
           <h2>
             TU PEDIDO
-            <span>🛒</span>
+            <span><i class="fas fa-shopping-basket"></i></span>
           </h2>
           <button
             class="btn-cerrar"
@@ -282,7 +282,7 @@
             style="display: flex; flex-direction: column; gap: 14px">
             <div>
               <label class="form-label">
-                👤 Nombre
+                <i class="fas fa-user"></i> Nombre
                 <span style="color: red">*</span>
               </label>
               <input
@@ -295,7 +295,7 @@
 
             <div>
               <label class="form-label">
-                📱 WhatsApp
+                <i class="fas fa-phone"></i> WhatsApp
                 <span style="color: red">*</span>
               </label>
               <input
@@ -321,7 +321,7 @@
                   ">
                   ESPECIAL
                 </span>
-                📝 Nota para la cocina
+                <i class="fas fa-clipboard"></i> Nota para la cocina
               </label>
               <textarea
                 id="chkNota"
@@ -336,7 +336,59 @@
 
             <div>
               <label class="form-label">
-                💳 Método de pago
+                <i class="fas fa-truck-fast"></i> Tipo de entrega
+                <span style="color: red">*</span>
+              </label>
+              <div class="pay-grid">
+                <div class="pay-opt">
+                  <input
+                    type="radio"
+                    name="entrega"
+                    id="entregaLlevar"
+                    value="Para llevar"
+                    checked
+                    onchange="toggleDireccion()" />
+                  <label for="entregaLlevar">
+                    <i class="fas fa-bag-shopping"></i>
+                    Para llevar
+                  </label>
+                </div>
+                <div class="pay-opt">
+                  <input
+                    type="radio"
+                    name="entrega"
+                    id="entregaDomicilio"
+                    value="Domicilio"
+                    onchange="toggleDireccion()" />
+                  <label for="entregaDomicilio">
+                    <i class="fas fa-house"></i>
+                    Domicilio
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div
+              id="direccionContainer"
+              style="display: none">
+              <label class="form-label">
+                <i class="fas fa-map-pin"></i> Dirección de entrega
+                <span style="color: red">*</span>
+              </label>
+              <textarea
+                id="chkDireccion"
+                class="nota-area"
+                rows="2"
+                placeholder="Calle, número, barrio, referencias importantes..."></textarea>
+              <p class="nota-hint">
+                <i class="fas fa-info-circle"></i>
+                Incluye referencias para que encontremos fácilmente tu ubicación.
+              </p>
+            </div>
+
+            <div>
+              <label class="form-label">
+                <i class="fas fa-credit-card"></i> Método de pago
                 <span style="color: red">*</span>
               </label>
               <div class="pay-grid">
@@ -580,7 +632,7 @@
             /* Imagen del producto o placeholder */
             const imgSlot = p.imagen
               ? `<div class="prod-img-wrap"><img src="${p.imagen}" alt="${p.nombre}" class="prod-img"></div>`
-              : `<div class="prod-img-placeholder"><span>📷</span><small>Próximamente</small></div>`;
+              : `<div class="prod-img-placeholder"><span><i class="fas fa-camera"></i></span><small>Próximamente</small></div>`;
 
             return `
           <div class="prod-card ${inCart ? 'en-carrito' : ''} fade-up" style="animation-delay:${i * 0.04}s">
@@ -732,6 +784,7 @@
               .join('')}`;
           abrirModal('modalCheckout', 'sheetCheckout');
           toggleTransfer();
+          toggleDireccion();
         }, 380);
       };
       window.cerrarCheckout = function () {
@@ -746,35 +799,98 @@
           : 'none';
       };
 
-      /* ── ENVIAR PEDIDO ── */
+      window.toggleDireccion = function () {
+        const isDomicilio =
+          document.querySelector('input[name="entrega"]:checked').value ===
+          'Domicilio';
+        const direccionContainer = document.getElementById('direccionContainer');
+        const direccionInput = document.getElementById('chkDireccion');
+        
+        if (isDomicilio) {
+          direccionContainer.style.display = 'block';
+          direccionInput.required = true;
+        } else {
+          direccionContainer.style.display = 'none';
+          direccionInput.required = false;
+          direccionInput.value = '';
+        }
+      };
+
       window.enviarPedido = async function () {
         const btn = document.getElementById('btnEnviar');
+        
+        // Prevent double submission
+        if (btn.disabled) return;
+        
         const nombre = document.getElementById('chkNombre').value.trim();
         const ws = document.getElementById('chkWS').value.trim();
+        const entrega = document.querySelector('input[name="entrega"]:checked').value;
+        const direccion = document.getElementById('chkDireccion').value.trim();
         const pago = document.querySelector('input[name="pago"]:checked').value;
         const nota = document.getElementById('chkNota').value.trim();
-        if (!nombre || !ws) return alert('Completa los datos requeridos.');
+        
+        // Validaciones completas
+        if (!nombre) return alert('Por favor, ingresa tu nombre.');
+        if (nombre.length < 2) return alert('El nombre debe tener al menos 2 caracteres.');
+        
+        if (!ws) return alert('Por favor, ingresa tu número WhatsApp.');
+        // Validar formato de WhatsApp (solo números, 10+ dígitos)
+        const wsLimpio = ws.replace(/\D/g, '');
+        if (wsLimpio.length < 10) return alert('El número WhatsApp debe tener al menos 10 dígitos.');
+        
+        if (entrega === 'Domicilio' && !direccion) {
+          return alert('Por favor, completa la dirección de entrega.');
+        }
+        if (entrega === 'Domicilio' && direccion.length < 5) {
+          return alert('La dirección debe tener más detalles.');
+        }
+        
+        // Validar que el carrito no esté vacío
+        if (!state.carrito || state.carrito.length === 0) {
+          return alert('Tu carrito está vacío. Agrega productos antes de enviar.');
+        }
+        
+        // Validar que todos los items tengan cantidad válida
+        const carritoValido = state.carrito.every(i => 
+          i.cantidad > 0 && 
+          !isNaN(i.cantidad) && 
+          i.precio > 0 && 
+          !isNaN(i.precio)
+        );
+        if (!carritoValido) {
+          return alert('Hay un error en los datos del carrito. Intenta de nuevo.');
+        }
 
         const total = state.carrito.reduce(
           (s, i) => s + i.precio * i.cantidad,
           0,
         );
+        
+        // Validar total
+        if (total <= 0 || isNaN(total)) {
+          return alert('El total debe ser mayor a $0.');
+        }
+
         const pedido = {
           idExterno: state.orderId,
           nombre,
-          whatsapp: ws,
+          whatsapp: wsLimpio,
+          tipoEntrega: entrega,
+          direccion: entrega === 'Domicilio' ? direccion : '',
           metodoPago: pago,
           nota: nota || '',
           items: state.carrito.map((i) => ({
             id: i.id,
             nombre: i.nombre,
-            precio: i.precio,
+            precio: Number(i.precio),
             categoria: i.categoria,
-            cantidad: i.cantidad,
+            cantidad: Number(i.cantidad),
+            subtotal: Number(i.precio) * Number(i.cantidad),
           })),
-          total,
+          total: Number(total),
           estado: 'pendiente',
           origen: 'web',
+          horaCreacion: new Date().toLocaleTimeString('es-CO'),
           fecha: firebase.firestore.FieldValue.serverTimestamp(),
         };
 
@@ -782,10 +898,21 @@
           btn.disabled = true;
           btn.innerHTML =
             '<i class="fas fa-circle-notch fa-spin"></i> PROCESANDO...';
-          await db.collection('pedidos_externos').add(pedido);
+          
+          // Agregar con ID único basado en timestamp para evitar duplicados
+          const docRef = await db.collection('pedidos_externos').add(pedido);
+          
+          // Verificar que se creó correctamente
+          const savedDoc = await docRef.get();
+          if (!savedDoc.exists) {
+            throw new Error('Error: El pedido no se guardó correctamente.');
+          }
+          
           alert(
-            `✅ ¡Pedido ${state.orderId} enviado!\nEn breve lo preparamos 🐾`,
+            `¡Pedido ${state.orderId} enviado!\nEn breve lo preparamos 🐾`,
           );
+          
+          // Limpiar estado después de confirmación exitosa
           state.carrito = [];
           guardarCarritoLocal();
           state.orderId = genId();
@@ -795,9 +922,10 @@
           cerrarCheckout();
           document.getElementById('checkoutForm').reset();
           toggleTransfer();
+          toggleDireccion();
         } catch (e) {
-          console.error(e);
-          alert('❌ Error: ' + e.message);
+          console.error('Error enviando pedido:', e);
+          alert('Error: ' + (e.message || 'No se pudo procesar el pedido. Intenta de nuevo.'));
         } finally {
           btn.disabled = false;
           btn.innerHTML = '<i class="fas fa-paper-plane"></i> ENVIAR PEDIDO';
