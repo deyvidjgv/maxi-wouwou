@@ -764,59 +764,74 @@ body {
 .form-label {
   display: block;
   font-weight: 900;
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--azul);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.form-label i {
+  color: var(--amarillo);
+  font-size: 1.1rem;
 }
 .form-input {
   width: 100%;
-  padding: 11px 14px;
+  padding: 14px 16px;
   border: 2px solid #dbeafe;
   background: #f8fbff;
   font-family: 'Nunito', sans-serif;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1rem;
   outline: none;
-  transition: border 0.2s;
+  transition: all 0.2s;
+  border-radius: 6px;
 }
 .form-input:focus {
   border-color: var(--amarillo);
   background: #fffdf0;
+  box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.1);
 }
 .nota-area {
   width: 100%;
-  padding: 11px 14px;
+  padding: 14px 16px;
   border: 2px dashed var(--amarillo);
   background: #fffdf0;
   font-family: 'Nunito', sans-serif;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1rem;
   outline: none;
   resize: none;
-  min-height: 72px;
-  transition: border 0.2s;
+  min-height: 80px;
+  transition: all 0.2s;
+  border-radius: 6px;
 }
 .nota-area:focus {
   border-color: var(--azul);
   border-style: solid;
+  box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
 }
 .nota-hint {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--gris);
   font-weight: 700;
-  margin-top: 4px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 .nota-hint i {
   color: var(--amarillo);
+  font-size: 0.9rem;
 }
 
 /* ── PAY OPTIONS ── */
 .pay-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 .pay-opt input {
   display: none;
@@ -825,58 +840,76 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 14px;
+  gap: 8px;
+  padding: 16px;
   border: 2px solid #dbeafe;
   background: #f8fbff;
   cursor: pointer;
   font-weight: 800;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--gris);
   transition: all 0.15s;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 .pay-opt label i {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
+  color: var(--azul);
 }
 .pay-opt input:checked + label {
   border-color: var(--amarillo);
   background: #fffdf0;
   color: var(--azul);
-  box-shadow: 3px 3px 0 var(--amarillo);
+  box-shadow: 0 4px 12px rgba(245, 197, 24, 0.3);
+  transform: scale(1.02);
 }
 
 /* ── TRANSFER ALERT ── */
 .transfer-alert {
   background: #ebf3ff;
-  border-left: 4px solid var(--azul2);
-  padding: 12px 14px;
-  font-size: 0.82rem;
+  border-left: 5px solid var(--azul2);
+  padding: 14px 16px;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--azul);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.transfer-alert i {
+  flex-shrink: 0;
 }
 .transfer-alert a {
   font-weight: 900;
   color: var(--azul);
+  text-decoration: none;
+}
+.transfer-alert a:hover {
+  text-decoration: underline;
 }
 
 /* ── TOTAL ROW ── */
 .total-row {
   background: var(--azul);
-  padding: 14px 18px;
+  padding: 16px 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 8px;
+  margin: 6px 0;
 }
 .total-row span:first-child {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 900;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
 .total-row span:last-child {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: var(--amarillo);
   letter-spacing: 1px;
 }

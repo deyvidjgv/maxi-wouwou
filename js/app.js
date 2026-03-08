@@ -1299,7 +1299,10 @@ const app = {
                <span style="display:block; font-size:0.75rem; color:#64748b; font-weight:bold; uppercase;">TOTAL</span>
                <span style="font-size:1.3rem; font-weight:900; color:var(--primary);">$${(p.total || 0).toLocaleString()}</span>
              </div>
-             <div style="display:flex; gap:6px; flex-shrink:0;">
+             <div style="display:flex; gap:6px; flex-shrink:0; flex-wrap: wrap;">
+               <button class="btn btn-primary" onclick="app.editarPedidoWeb('${p.id}')" style="border-radius:6px; display:flex; align-items:center; gap:4px; font-size:0.9rem; padding:7px 12px; white-space:nowrap;">
+                 <i data-lucide="edit" style="width:14px; height:14px;"></i> Editar
+               </button>
                <button class="btn btn-primary" onclick="app.completarPedidoWeb('${p.id}')" style="border-radius:6px; display:flex; align-items:center; gap:4px; font-size:0.9rem; padding:7px 12px; white-space:nowrap;">
                  <i data-lucide="check-circle" style="width:14px; height:14px;"></i> Completar
                </button>
@@ -1365,6 +1368,105 @@ const app = {
     } catch (e) {
       console.error('Error al completar pedido web:', e);
       alert('Hubo un error completando el pedido web: ' + e.message);
+    }
+  },
+
+  async editarPedidoWeb(docId) {
+    const pedido = this.pedidosWeb.find((x) => x.id === docId);
+    if (!pedido) {
+      alert('Error: Pedido no encontrado.');
+      return;
+    }
+
+    // Mostrar lista de campos editables
+    const cambios = {};
+
+    const nuevoNombre = prompt('Nombre del cliente:', pedido.nombre);
+    if (nuevoNombre === null) return; // Cancelado
+    if (!nuevoNombre.trim()) {
+      alert('El nombre no puede estar vacío.');
+      return;
+    }
+    cambios.nombre = nuevoNombre.trim();
+
+    const nuevoWhatsapp = prompt('WhatsApp:', pedido.whatsapp);
+    if (nuevoWhatsapp === null) {
+      // Si cancela aquí, no hace nada
+      return;
+    }
+    const wsLimpio = nuevoWhatsapp.replace(/\D/g, '');
+    if (wsLimpio.length < 10) {
+      alert('El WhatsApp debe tener al menos 10 dígitos.');
+      return;
+    }
+    cambios.whatsapp = wsLimpio;
+
+    const tipoEntrega = prompt(
+      'Tipo de entrega (Pasa por el / Domicilio):',
+      pedido.tipoEntrega || 'Pasa por el',
+    );
+    if (tipoEntrega === null) return;
+    if (!['Pasa por el', 'Domicilio'].includes(tipoEntrega)) {
+      alert('Tipo de entrega inválido.');
+      return;
+    }
+    cambios.tipoEntrega = tipoEntrega;
+
+    if (tipoEntrega === 'Domicilio') {
+      const nuevaDireccion = prompt('Dirección:', pedido.direccion || '');
+      if (nuevaDireccion === null) return;
+      if (nuevaDireccion.trim().length < 5) {
+        alert('La dirección debe tener más detalles.');
+        return;
+      }
+      cambios.direccion = nuevaDireccion.trim();
+    } else {
+      cambios.direccion = '';
+    }
+
+    const nuevoMetodoPago = prompt(
+      'Método de pago (Efectivo / Transferencia):',
+      pedido.metodoPago || 'Efectivo',
+    );
+    if (nuevoMetodoPago === null) return;
+    if (!['Efectivo', 'Transferencia'].includes(nuevoMetodoPago)) {
+      alert('Método de pago inválido.');
+      return;
+    }
+    cambios.metodoPago = nuevoMetodoPago;
+
+    const nuevaNota = prompt('Nota especial:', pedido.nota || '');
+    if (nuevaNota === null) return;
+    cambios.nota = nuevaNota.trim();
+
+    // Confirmar cambios
+    if (
+      !confirm(
+        `¿Confirmas los cambios?\n\nNombre: ${cambios.nombre}\nWhatsApp: ${cambios.whatsapp}\nEntrega: ${cambios.tipoEntrega}\nPago: ${cambios.metodoPago}`,
+      )
+    )
+      return;
+
+    try {
+      // Actualizar en Firestore
+      const extRef = firebase
+        .firestore()
+        .collection('pedidos_externos')
+        .doc(docId);
+
+      await extRef.update({
+        ...cambios,
+        ultimaActualizacion: firebase.firestore.FieldValue.serverTimestamp(),
+        editadoPor: this.nombreUsuario || 'Admin',
+      });
+
+      this.notificar(
+        `✅ Pedido ${pedido.idExterno || docId} actualizado correctamente.`,
+      );
+      this.renderPedidosWeb();
+    } catch (e) {
+      console.error('Error al editar pedido web:', e);
+      alert('Error: ' + (e.message || 'No se pudo actualizar el pedido.'));
     }
   },
 
